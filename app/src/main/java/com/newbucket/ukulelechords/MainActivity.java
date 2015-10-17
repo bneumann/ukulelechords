@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,6 +33,10 @@ public class MainActivity extends AppCompatActivity {
 
     private ViewGroup mChordMap;
     private ViewGroup mHarmonyMap;
+    private UkeFretView mFretView;
+    private ChordLib mChordlib;
+    private Chord mCurrentChord;
+
     private String[] mChordArray = {"C", "D", "E", "F", "G",  "A", "B", SYMBOL_FLAT};
     private String[] mHarmonyArray = {"Reg", "7", "m", "m7", "dim",  "aug", "6", "maj7", "9"};
 
@@ -44,6 +49,11 @@ public class MainActivity extends AppCompatActivity {
 
         mChordMap = (ViewGroup)findViewById(R.id.chord_map);
         mHarmonyMap = (ViewGroup)findViewById(R.id.harm_map);
+        mFretView = (UkeFretView)findViewById(R.id.fret_view);
+        mChordlib = new ChordLib();
+
+        mFretView.SetChord(mChordlib.getChord("C"));
+        mFretView.setOnLongClickListener(new onFretLongCLickListener());
 
         // The tree observer throws this event when the layout has been measured.
         ViewTreeObserver vto = mChordMap.getViewTreeObserver();
@@ -117,6 +127,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private class onFretLongCLickListener implements View.OnLongClickListener
+    {
+        @Override
+        public boolean onLongClick(View v) {
+            Log.d(TAG, "Long click detected");
+            return true;
+        }
+    }
+
     private class onKeyClickListener implements View.OnClickListener
     {
         @Override
@@ -141,6 +160,11 @@ public class MainActivity extends AppCompatActivity {
                         break;
                 }
                 drawKeys();
+            }
+            else
+            {
+                mCurrentChord = mChordlib.getChord(key);
+                mFretView.SetChord(mCurrentChord);
             }
         }
     }
