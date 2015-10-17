@@ -142,6 +142,11 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View v) {
             FloatingActionButton fab = (FloatingActionButton)v;
             String key = (String)v.getTag(R.id.tag_key_chord);
+            if(key == null)
+            {
+                Log.w(TAG, "tag_key_chord coul not be found");
+                return;
+            }
             if(key.equals(SYMBOL_SHARP) || key.equals(SYMBOL_FLAT)|| key.equals(SYMBOL_NATURAL))
             {
                 switch(mIntonation)
@@ -163,7 +168,21 @@ public class MainActivity extends AppCompatActivity {
             }
             else
             {
-                mCurrentChord = mChordlib.getChord(key);
+                Log.d(TAG, "Key was: " + key);
+                String intonation = "";
+                switch(mIntonation)
+                {
+                    case SYMBOL_NATURAL:
+                        intonation = "";
+                        break;
+                    case SYMBOL_FLAT:
+                        intonation = "b";
+                        break;
+                    case SYMBOL_SHARP:
+                        intonation = "#";
+                        break;
+                }
+                mCurrentChord = mChordlib.getChord(key + intonation);
                 mFretView.SetChord(mCurrentChord);
             }
         }

@@ -1,6 +1,5 @@
 package com.newbucket.ukulelechords;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 
 /**
@@ -12,10 +11,19 @@ public class Note {
     private int mTune;
     private String[] maScaleSharp= {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
     private String[] maScaleFlat= {"C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"};
-    private String[] maTuneing= {"A", "E", "C", "G"};
+    private String[] maTuning = {"A", "E", "C", "G"};
 
     private boolean mBaseSharp = false;
     private boolean mNoteSharp = false;
+
+    public Note()
+    {
+        mBaseSharp = true;
+        mNoteSharp = true;
+        mNote = 0;
+        mBase = 0;
+        mTune = 2; // Because 3rd string no fret is "C"
+    }
 
     public Note(String note)
     {
@@ -24,7 +32,7 @@ public class Note {
             mBaseSharp = true;
             mNoteSharp = true;
         }
-        CaluclateBaseIndex(note);
+        CalculateBaseIndex(note);
         CalculateNoteIndex(note);
     }
 
@@ -38,7 +46,7 @@ public class Note {
         {
             mNoteSharp = true;
         }
-        CaluclateBaseIndex(base);
+        CalculateBaseIndex(base);
         CalculateNoteIndex(note);
     }
 
@@ -54,23 +62,23 @@ public class Note {
             mBaseSharp = true;
         }
         mNoteSharp = true;
-        CaluclateBaseIndex(str);
+        CalculateBaseIndex(str);
         mNote = mBase + fret;
     }
 
-    private void CaluclateTuneIndex(String base)
+    private void CalculateTuneIndex(String base)
     {
         if(mBaseSharp)
         {
-            mTune = Arrays.asList(maTuneing).indexOf(base);
+            mTune = Arrays.asList(maTuning).indexOf(base);
         }
         else
         {
-            mTune = Arrays.asList(maTuneing).indexOf(base);
+            mTune = Arrays.asList(maTuning).indexOf(base);
         }
     }
 
-    private void CaluclateBaseIndex(String base)
+    private void CalculateBaseIndex(String base)
     {
         if(mBaseSharp)
         {
@@ -80,7 +88,7 @@ public class Note {
         {
             mBase = Arrays.asList(maScaleFlat).indexOf(base);
         }
-        CaluclateTuneIndex(base);
+        CalculateTuneIndex(base);
     }
 
     private void CalculateNoteIndex(String note)
@@ -112,5 +120,58 @@ public class Note {
     public int getString()
     {
         return mTune + 1;
+    }
+
+    public String getNextInScale(String note)
+    {
+        int idx;
+        String[] tmpArray;
+        if(note.contains("b"))
+        {
+            tmpArray = maScaleFlat;
+        }
+        else
+        {
+            tmpArray = maScaleSharp;
+        }
+        idx = Arrays.asList(tmpArray).indexOf(note);
+        if(idx == tmpArray.length - 1)
+        {
+            idx = 0;
+        }
+        else
+        {
+            idx++;
+        }
+        return tmpArray[idx];
+    }
+
+    public String[] getTuning()
+    {
+        return maTuning;
+    }
+
+    public void setTuning(String[] tuning) throws StringIndexOutOfBoundsException
+    {
+        if(tuning.length != 4)
+        {
+            throw new StringIndexOutOfBoundsException("The tuning array must be have a length of 4");
+        }
+        maTuning = tuning;
+    }
+
+    @Override
+    public String toString()
+    {
+        String ret;
+        if (mNoteSharp)
+        {
+            ret = maScaleSharp[mNote];
+        }
+        else
+        {
+            ret = maScaleFlat[mNote];
+        }
+        return ret;
     }
 }
