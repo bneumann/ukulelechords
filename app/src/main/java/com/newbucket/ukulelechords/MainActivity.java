@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
     public String TAG = "MainActivity";
 
     protected String mIntonation = SYMBOL_NATURAL;
+    protected String mHarmonic = "";
+    protected String mKey = "C";
 
     private ViewGroup mChordMap;
     private ViewGroup mHarmonyMap;
@@ -52,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         mFretView = (UkeFretView)findViewById(R.id.fret_view);
         mChordlib = new ChordLib();
 
-        mFretView.SetChord(mChordlib.getChord("C"));
+        mFretView.SetChord(mChordlib.getChord(mKey));
         mFretView.setOnLongClickListener(new onFretLongCLickListener());
 
         // The tree observer throws this event when the layout has been measured.
@@ -142,49 +144,50 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View v) {
             FloatingActionButton fab = (FloatingActionButton)v;
             String key = (String)v.getTag(R.id.tag_key_chord);
-            if(key == null)
+            String harm = (String)v.getTag(R.id.tag_key_harmony);
+            if (harm != null)
             {
-                Log.w(TAG, "tag_key_chord coul not be found");
-                return;
+                mHarmonic = harm;
             }
-            if(key.equals(SYMBOL_SHARP) || key.equals(SYMBOL_FLAT)|| key.equals(SYMBOL_NATURAL))
-            {
-                switch(mIntonation)
-                {
-                    case SYMBOL_NATURAL:
-                        mIntonation = SYMBOL_FLAT;
-                        mChordArray[mChordArray.length - 1] = SYMBOL_SHARP;
-                        break;
-                    case SYMBOL_FLAT:
-                        mIntonation = SYMBOL_SHARP;
-                        mChordArray[mChordArray.length - 1] = SYMBOL_NATURAL;
-                        break;
-                    case SYMBOL_SHARP:
-                        mIntonation = SYMBOL_NATURAL;
-                        mChordArray[mChordArray.length - 1] = SYMBOL_FLAT;
-                        break;
-                }
-                drawKeys();
-            }
-            else
+            if(key != null) // do something with the keys and harmonics
             {
                 Log.d(TAG, "Key was: " + key);
-                String intonation = "";
-                switch(mIntonation)
+                mKey = key;
+                if (key.equals(SYMBOL_SHARP) || key.equals(SYMBOL_FLAT) || key.equals(SYMBOL_NATURAL))
                 {
-                    case SYMBOL_NATURAL:
-                        intonation = "";
-                        break;
-                    case SYMBOL_FLAT:
-                        intonation = "b";
-                        break;
-                    case SYMBOL_SHARP:
-                        intonation = "#";
-                        break;
+                    switch (mIntonation)
+                    {
+                        case SYMBOL_NATURAL:
+                            mIntonation = SYMBOL_FLAT;
+                            mChordArray[mChordArray.length - 1] = SYMBOL_SHARP;
+                            break;
+                        case SYMBOL_FLAT:
+                            mIntonation = SYMBOL_SHARP;
+                            mChordArray[mChordArray.length - 1] = SYMBOL_NATURAL;
+                            break;
+                        case SYMBOL_SHARP:
+                            mIntonation = SYMBOL_NATURAL;
+                            mChordArray[mChordArray.length - 1] = SYMBOL_FLAT;
+                            break;
+                    }
+                    drawKeys();
                 }
-                mCurrentChord = mChordlib.getChord(key + intonation);
-                mFretView.SetChord(mCurrentChord);
             }
+            String intonation = "";
+            switch (mIntonation)
+            {
+                case SYMBOL_NATURAL:
+                    intonation = "";
+                    break;
+                case SYMBOL_FLAT:
+                    intonation = "b";
+                    break;
+                case SYMBOL_SHARP:
+                    intonation = "#";
+                    break;
+            }
+            mCurrentChord = mChordlib.getChord(mKey + intonation + mHarmonic);
+            mFretView.SetChord(mCurrentChord);
         }
     }
 

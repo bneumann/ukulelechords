@@ -70,6 +70,13 @@ public class ApplicationTest extends AndroidTestCase{
         }
     }
 
+    public void testChordLib()
+    {
+        ChordLib cl = new ChordLib();
+        assertEquals(0, cl.getChord("C").getNotes().get(0).getFret());
+    }
+
+
     public void testReturnNoteString()
     {
         Note n  = new Note("G", "C");

@@ -19,8 +19,12 @@ public class ChordLib {
 
         //chord.addNote(new Note("A", 3));
         //addChord("C", chord);
+        //addChord("C", new Chord(new int[]{Note.tScale.C, Note.tScale.E, Note.tScale.G}));
         addChord("C", new Chord(new String[]{"C", "E", "G"}));
         addChord("C#", new Chord(new String[]{"C#", "E#", "G#"}));
+        addChord("Cm", new Chord(new String[]{"C", "D#", "G"}));
+        addChord("C7", new Chord(new String[]{"C", "D", "G", "Bb"}));
+        addChord("Cm7", new Chord(new String[]{"C", "D#", "G", "Bb"}));
         //addChord("Cb", new Chord(new String[]{"Cb", "Eb", "Gb"}));
 
 //        chord = new Chord();

@@ -58,4 +58,55 @@ public class Chord
         }
     }
 
+    public Chord(int[] notes)
+    {
+        // 12 x 4
+        int matrix[][] = Note.createTuneMatrix(Note.TUNING_UKULELE);
+
+    }
+
+    public enum Harmonic
+    {
+        Major,
+        Minor,
+        Seven,
+        MinorSeven,
+        MajorSeven,
+        Aug,
+        Dim
+    }
+
+    public Chord(Note base, Harmonic harm)
+    {
+        int first = base.getFret();
+        int second, third;
+        int fourth = first;
+        switch(harm)
+        {
+            case Major:
+                second = first + 4;
+                third = first + 7;
+            break;
+            case Minor:
+                second = first + 3;
+                third = first + 7;
+                break;
+            case Seven:
+                second = first + 4;
+                third = first + 7;
+                fourth = first + 10;
+                break;
+            case MinorSeven:
+                second = first + 3;
+                third = first + 7;
+                fourth = first + 10;
+                break;
+            case Aug:
+                second = first + 4;
+                third = first + 8;
+                break;
+        }
+        addNote();
+    }
+
 }
