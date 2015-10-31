@@ -12,65 +12,36 @@ public class ChordLib {
 
     private HashMap<String, Chord> mChords;
 
-    public ChordLib()
-    {
+    public ChordLib() {
         mChords = new HashMap<>();
-        Chord chord = new Chord();
 
-        //chord.addNote(new Note("A", 3));
-        //addChord("C", chord);
-        addChord("C", new Chord(new String[]{"C", "E", "G"}));
-        addChord("C#", new Chord(new String[]{"C#", "E#", "G#"}));
-        //addChord("Cb", new Chord(new String[]{"Cb", "Eb", "Gb"}));
-
-        chord = new Chord();
-        chord.addNote(new Note("A", 5));
-        chord.addNote(new Note("E", 2));
-        chord.addNote(new Note("C", 2));
-        chord.addNote(new Note("G", 2));
-        addChord("D", chord);
-        addChord("D#", new Chord(new String[]{"D#", "G", "A#"}));
-
-        chord = new Chord();
-        chord.addNote(new Note("A", 2));
-        chord.addNote(new Note("E", 4));
-        chord.addNote(new Note("C", 4));
-        chord.addNote(new Note("G", 4));
-        addChord("E", chord);
-//        addChord("E", new Chord(new String[]{"E", "G#", "B"}));
-        addChord("E#", new Chord(new String[]{"F", "A", "C"}));
-
-//        chord = new Chord();
-//        chord.addNote(new Note("E", 1));
-//        chord.addNote(new Note("G", 3));
-//        addChord("F", chord);
-        addChord("F", new Chord(new String[]{"F", "A", "C"}));
-
-//        chord = new Chord();
-//        chord.addNote(new Note("A", 2));
-//        chord.addNote(new Note("E", 3));
-//        chord.addNote(new Note("C", 2));
-//        addChord("G", chord);
-        addChord("G", new Chord(new String[]{"G", "B", "D"}));
-
-        addChord("A", new Chord(new String[]{"A", "C#", "E"}));
-
-//        chord = new Chord();
-//        chord.addNote(new Note("A", 2));
-//        chord.addNote(new Note("E", 2));
-//        chord.addNote(new Note("C", 3));
-//        chord.addNote(new Note("G", 4));
-//        addChord("B", chord);
-        addChord("B", new Chord(new String[]{"B", "D", "F#"}));
-        
+        addChord("C", new Chord(3, 0, 0, 0));
+        addChord("C#", new Chord(4, 1, 1, 1));
+        addChord("Db", new Chord(4, 1, 1, 1));
+        addChord("D", new Chord(5, 2, 2, 2));
+        addChord("D#", new Chord(1, 3, 3, 3));
+        addChord("Eb", new Chord(1, 3, 3, 3));
+        addChord("E", new Chord(2, 4, 4, 4));
+        addChord("E#", new Chord(0, 0, 1, 3));
+        addChord("Fb", new Chord(2, 4, 4, 4));
+        addChord("F", new Chord(0, 0, 1, 3));
+        addChord("F#", new Chord(1, 2, 1, 3));
+        addChord("Gb", new Chord(1, 2, 1, 3));
+        addChord("G", new Chord(2, 3, 2, 0));
+        addChord("G#", new Chord(3, 4, 3, 1));
+        addChord("Ab", new Chord(3, 4, 3, 5));
+        addChord("A", new Chord(0, 0, 1, 2));
+        addChord("A#", new Chord(1, 1, 2, 3));
+        addChord("Bb", new Chord(1, 1, 2, 3));
+        addChord("B", new Chord(2, 2, 3, 4));
+        addChord("Cb", new Chord(2, 2, 3, 4));
     }
 
     private void addChord(String key, Chord chord) {
         mChords.put(key, chord);
     }
 
-    public Chord getChord(String key)
-    {
+    public Chord getChord(String key) {
         return mChords.get(key);
     }
 

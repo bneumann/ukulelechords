@@ -14,6 +14,11 @@ public class Chord
     {
     }
 
+    public Chord(int firstString, int secondString, int thirdString, int fourthString)
+    {
+        addNotes(firstString, secondString, thirdString, fourthString);
+    }
+
     public ArrayList<Note> getNotes()
     {
         return mNotes;
@@ -23,6 +28,14 @@ public class Chord
     {
         mNotes.add(n);
     }
+
+    public void addNotes(int firstString, int secondString, int thirdString, int fourthString) {
+        addNote(new Note("A", firstString));
+        addNote(new Note("E", secondString));
+        addNote(new Note("C", thirdString));
+        addNote(new Note("G", fourthString));
+    }
+
 
     //FIXME: Works only with sharp scale at the moment
     public Chord(String[] notes)
