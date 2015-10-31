@@ -23,22 +23,21 @@ public class ChordLib {
         addChord("C#", new Chord(new String[]{"C#", "E#", "G#"}));
         //addChord("Cb", new Chord(new String[]{"Cb", "Eb", "Gb"}));
 
-//        chord = new Chord();
-//        chord.addNote(new Note("A", 5));
-//        chord.addNote(new Note("E", 2));
-//        chord.addNote(new Note("C", 2));
-//        chord.addNote(new Note("G", 2));
-//        addChord("D", chord);
-        addChord("D", new Chord(new String[]{"D", "F#", "A"}));
+        chord = new Chord();
+        chord.addNote(new Note("A", 5));
+        chord.addNote(new Note("E", 2));
+        chord.addNote(new Note("C", 2));
+        chord.addNote(new Note("G", 2));
+        addChord("D", chord);
         addChord("D#", new Chord(new String[]{"D#", "G", "A#"}));
 
-//        chord = new Chord();
-//        chord.addNote(new Note("A", 2));
-//        chord.addNote(new Note("E", 4));
-//        chord.addNote(new Note("C", 4));
-//        chord.addNote(new Note("G", 4));
-//        addChord("E", chord);
-        addChord("E", new Chord(new String[]{"E", "G#", "B"}));
+        chord = new Chord();
+        chord.addNote(new Note("A", 2));
+        chord.addNote(new Note("E", 4));
+        chord.addNote(new Note("C", 4));
+        chord.addNote(new Note("G", 4));
+        addChord("E", chord);
+//        addChord("E", new Chord(new String[]{"E", "G#", "B"}));
         addChord("E#", new Chord(new String[]{"F", "A", "C"}));
 
 //        chord = new Chord();
@@ -63,6 +62,7 @@ public class ChordLib {
 //        chord.addNote(new Note("G", 4));
 //        addChord("B", chord);
         addChord("B", new Chord(new String[]{"B", "D", "F#"}));
+        
     }
 
     private void addChord(String key, Chord chord) {
