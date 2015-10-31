@@ -2,6 +2,7 @@ package com.newbucket.ukulelechords;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -9,6 +10,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -29,7 +31,9 @@ public class MainActivity extends AppCompatActivity {
 
     public String TAG = "MainActivity";
 
+    protected String mKey ="C";
     protected String mIntonation = SYMBOL_NATURAL;
+    protected String mHarmony = "";
 
     private ViewGroup mChordMap;
     private ViewGroup mHarmonyMap;
@@ -37,8 +41,8 @@ public class MainActivity extends AppCompatActivity {
     private ChordLib mChordlib;
     private Chord mCurrentChord;
 
-    private String[] mChordArray = {"C", "D", "E", "F", "G",  "A", "B", SYMBOL_FLAT};
-    private String[] mHarmonyArray = {"Reg", "7", "m", "m7", "dim",  "aug", "6", "maj7", "9"};
+    private String[] mChordArray = {"C", "D", "E", "F", "G", "A", "B", SYMBOL_FLAT};
+    private String[] mHarmonyArray = {"M", "7", "m", "m7", "dim", "aug", "6", "maj7", "9"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,12 +51,12 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mChordMap = (ViewGroup)findViewById(R.id.chord_map);
-        mHarmonyMap = (ViewGroup)findViewById(R.id.harm_map);
-        mFretView = (UkeFretView)findViewById(R.id.fret_view);
+        mChordMap = (ViewGroup) findViewById(R.id.chord_map);
+        mHarmonyMap = (ViewGroup) findViewById(R.id.harm_map);
+        mFretView = (UkeFretView) findViewById(R.id.fret_view);
         mChordlib = new ChordLib();
 
-        mFretView.SetChord(mChordlib.getChord("C"));
+        mFretView.SetChord(mChordlib.getChord(mKey));
         mFretView.setOnLongClickListener(new onFretLongCLickListener());
 
         // The tree observer throws this event when the layout has been measured.
@@ -88,14 +92,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void drawKeys()
-    {
+    private void drawKeys() {
         ArrayList<View> tList = getAllChildren(mChordMap);
         int counter = 0;
-        for (View v : tList)
-        {
+        for (View v : tList) {
             // Print key on buttons
-            FloatingActionButton fab = (FloatingActionButton)v;
+            FloatingActionButton fab = (FloatingActionButton) v;
             Bitmap.Config conf = Bitmap.Config.ARGB_4444; // see other conf types
             Bitmap bmp = Bitmap.createBitmap(24, 24, conf); // this creates a MUTABLE bitmap
             Canvas t = new Canvas(bmp);
@@ -106,15 +108,14 @@ public class MainActivity extends AppCompatActivity {
             p.setElegantTextHeight(true);
             p.setAntiAlias(true);
             // Draw keys
-            if(counter != tList.size() - 1) {
+            if (counter != tList.size() - 1) {
                 // Remove natural sign if intonation is natural because it looks weird.
                 if (mIntonation.equals(SYMBOL_NATURAL)) {
                     t.drawText(mChordArray[counter], 5, 20, p);
-                }
-                else {
+                } else {
                     t.drawText(mChordArray[counter] + mIntonation, 0, 20, p);
                 }
-            }else // Draw intonation symbol
+            } else // Draw intonation symbol
             {
                 t.drawText(mChordArray[counter], 8, 20, p);
             }
@@ -127,8 +128,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private class onFretLongCLickListener implements View.OnLongClickListener
-    {
+    private class onFretLongCLickListener implements View.OnLongClickListener {
         @Override
         public boolean onLongClick(View v) {
             Log.d(TAG, "Long click detected");
@@ -136,66 +136,70 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private class onKeyClickListener implements View.OnClickListener
-    {
+    private class onKeyClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            FloatingActionButton fab = (FloatingActionButton)v;
-            String key = (String)v.getTag(R.id.tag_key_chord);
-            if(key == null)
+            FloatingActionButton fab = (FloatingActionButton) v;
+            String key = (String) v.getTag(R.id.tag_key_chord);
+            String harm = (String) v.getTag(R.id.tag_key_harmony);
+            if (key != null)
             {
-                Log.w(TAG, "tag_key_chord coul not be found");
-                return;
-            }
-            if(key.equals(SYMBOL_SHARP) || key.equals(SYMBOL_FLAT)|| key.equals(SYMBOL_NATURAL))
-            {
-                switch(mIntonation)
-                {
-                    case SYMBOL_NATURAL:
-                        mIntonation = SYMBOL_FLAT;
-                        mChordArray[mChordArray.length - 1] = SYMBOL_SHARP;
-                        break;
-                    case SYMBOL_FLAT:
-                        mIntonation = SYMBOL_SHARP;
-                        mChordArray[mChordArray.length - 1] = SYMBOL_NATURAL;
-                        break;
-                    case SYMBOL_SHARP:
-                        mIntonation = SYMBOL_NATURAL;
-                        mChordArray[mChordArray.length - 1] = SYMBOL_FLAT;
-                        break;
+                if (key.equals(SYMBOL_SHARP) || key.equals(SYMBOL_FLAT) || key.equals(SYMBOL_NATURAL)) {
+                    switch (mIntonation) {
+                        case SYMBOL_NATURAL:
+                            mIntonation = SYMBOL_FLAT;
+                            mChordArray[mChordArray.length - 1] = SYMBOL_SHARP;
+                            break;
+                        case SYMBOL_FLAT:
+                            mIntonation = SYMBOL_SHARP;
+                            mChordArray[mChordArray.length - 1] = SYMBOL_NATURAL;
+                            break;
+                        case SYMBOL_SHARP:
+                            mIntonation = SYMBOL_NATURAL;
+                            mChordArray[mChordArray.length - 1] = SYMBOL_FLAT;
+                            break;
+                    }
+                    drawKeys();
                 }
-                drawKeys();
-            }
-            else
-            {
-                Log.d(TAG, "Key was: " + key);
-                String intonation = "";
-                switch(mIntonation)
+                else
                 {
-                    case SYMBOL_NATURAL:
-                        intonation = "";
-                        break;
-                    case SYMBOL_FLAT:
-                        intonation = "b";
-                        break;
-                    case SYMBOL_SHARP:
-                        intonation = "#";
-                        break;
+                    mKey = key;
+                    resetBackgroundColor(mChordMap);
+                    fab.setBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(),R.color.colorActiveButton));
                 }
-                mCurrentChord = mChordlib.getChord(key + intonation);
-                mFretView.SetChord(mCurrentChord);
             }
+            if(harm != null)
+            {
+                // Chordlib has no "M" extension
+                harm = harm.equals("M") ? "" : harm;
+                mHarmony = harm;
+            }
+            // TODO: This is crappy code. Oh yeah. Rewrite the whole intonation-symbol thingy
+            String intonation = "";
+            switch (mIntonation) {
+                case SYMBOL_NATURAL:
+                    intonation = "";
+                    break;
+                case SYMBOL_FLAT:
+                    intonation = "b";
+                    break;
+                case SYMBOL_SHARP:
+                    intonation = "#";
+                    break;
+            }
+            String nChord = mKey + mHarmony + intonation;
+            Log.d(TAG, nChord);
+            mCurrentChord = mChordlib.getChord(nChord);
+            mFretView.SetChord(mCurrentChord);
         }
     }
 
-    private void drawHarmonies()
-    {
+    private void drawHarmonies() {
         ArrayList<View> tList = getAllChildren(mHarmonyMap);
         int counter = 0;
-        for (View v : tList)
-        {
+        for (View v : tList) {
             // Print key on buttons
-            FloatingActionButton fab = (FloatingActionButton)v;
+            FloatingActionButton fab = (FloatingActionButton) v;
             Bitmap.Config conf = Bitmap.Config.ARGB_4444; // see other conf types
             Bitmap bmp = Bitmap.createBitmap(fab.getWidth(), fab.getHeight(), conf); // this creates a MUTABLE bitmap
             Canvas canvas = new Canvas(bmp);
@@ -209,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
             Rect bounds = new Rect();
             p.getTextBounds(mHarmonyArray[counter], 0, mHarmonyArray[counter].length(), bounds);
             int xPos = (canvas.getWidth() / 2) - (bounds.width() / 2);
-            int yPos = (int) ((fab.getHeight() / 2) - ((p.descent() + p.ascent()) / 2)) ;
+            int yPos = (int) ((fab.getHeight() / 2) - ((p.descent() + p.ascent()) / 2));
             // Draw harmonies
             canvas.drawText(mHarmonyArray[counter], xPos, yPos, p);
 
@@ -221,8 +225,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private ArrayList<View> getAllChildren(ViewGroup group)
+    private void resetBackgroundColor(ViewGroup buttonGroup)
     {
+        ArrayList<View> tList = getAllChildren(buttonGroup);
+        for (View b : tList) {
+            b.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.colorAccent));
+        }
+    }
+
+    private ArrayList<View> getAllChildren(ViewGroup group) {
         ArrayList<View> reply = new ArrayList<View>();
         for (int i = 0; i < group.getChildCount(); i++) {
             View v = group.getChildAt(i);
@@ -234,22 +245,18 @@ public class MainActivity extends AppCompatActivity {
         }
         return reply;
     }
-    
-    private void toggleVisibility(View targetView)
-    {
+
+    private void toggleVisibility(View targetView) {
         // make the view visible and start the animation
-        if(targetView.getVisibility() == View.INVISIBLE) {
+        if (targetView.getVisibility() == View.INVISIBLE) {
             reveal(targetView);
-        }
-        else
-        {
+        } else {
             hide(targetView);
         }
 
     }
 
-    private void reveal(View targetView)
-    {
+    private void reveal(View targetView) {
         // get the center for the clipping circle
         int cx = targetView.getWidth() / 2;
         int cy = targetView.getHeight() / 2;
@@ -261,8 +268,7 @@ public class MainActivity extends AppCompatActivity {
         anim.start();
     }
 
-    private void hide(final View targetView)
-    {
+    private void hide(final View targetView) {
         // get the center for the clipping circle
         int cx = targetView.getWidth() / 2;
         int cy = targetView.getHeight() / 2;
