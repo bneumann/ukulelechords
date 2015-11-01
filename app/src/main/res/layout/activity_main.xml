@@ -25,23 +25,11 @@
     <include layout="@layout/content_main" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/addharms"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_dialog_email"/>
-
-    <include layout="@layout/chord_keys_layout" />
-
-    <include layout="@layout/chord_harm_layout" />
-
-    <android.support.design.widget.FloatingActionButton
         android:visibility="visible"
         android:id="@+id/addchords"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|left"
+        android:layout_gravity="bottom|right"
         android:layout_margin="@dimen/fab_margin"
         android:src="@android:drawable/ic_dialog_info"/>
 
