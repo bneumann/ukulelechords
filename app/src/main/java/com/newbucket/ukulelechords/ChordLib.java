@@ -15,6 +15,7 @@ public class ChordLib {
     public ChordLib() {
         mChords = new HashMap<>();
 
+        // Source: http://ukuchords.com/files/ukuchords_complete_ukulele_chords_chart_180.png
         addChord("C", new Chord(3, 0, 0, 0));
         addChord("C7", new Chord(1, 0, 0, 0));
         addChord("Cm", new Chord(3, 3, 3, 0));
@@ -158,20 +159,64 @@ public class ChordLib {
         addChord("G#9", new Chord(2, 1, 2, 2));
 
         addChord("Ab", new Chord(3, 4, 3, 5));
-        addChord("G#7", new Chord(4, 3, 4, 1));
-        addChord("G#m", new Chord(2, 4, 3, 4));
-        addChord("G#m7", new Chord(2, 2, 3, 1));
-        addChord("G#dim", new Chord(2, 1, 2, 1));
-        addChord("G#aug", new Chord(3, 0, 0, 1));
-        addChord("G#6", new Chord(3, 1, 3, 1));
-        addChord("G#maj7", new Chord(3, 3, 3, 1));
-        addChord("G#9", new Chord(2, 1, 2, 2));
+        addChord("Ab7", new Chord(4, 3, 4, 1));
+        addChord("Abm", new Chord(2, 4, 3, 4));
+        addChord("Abm7", new Chord(2, 2, 3, 1));
+        addChord("Abdim", new Chord(2, 1, 2, 1));
+        addChord("Abaug", new Chord(3, 0, 0, 1));
+        addChord("Ab6", new Chord(3, 1, 3, 1));
+        addChord("Abmaj7", new Chord(3, 3, 3, 1));
+        addChord("Ab9", new Chord(2, 1, 2, 2));
         
         addChord("A", new Chord(0, 0, 1, 2));
+        addChord("A7", new Chord(0, 0, 1, 0));
+        addChord("Am", new Chord(0, 0, 0, 2));
+        addChord("Am7", new Chord(0, 0, 0, 0));
+        addChord("Adim", new Chord(3, 2, 3, 2));
+        addChord("Aaug", new Chord(4, 1, 1, 2));
+        addChord("A6", new Chord(0, 2, 1, 2));
+        addChord("Amaj7", new Chord(0, 0, 1, 1));
+        addChord("A9", new Chord(2, 0, 1, 0));
+
         addChord("A#", new Chord(1, 1, 2, 3));
+        addChord("A#7", new Chord(1, 1, 2, 1));
+        addChord("A#m", new Chord(1, 1, 1, 3));
+        addChord("A#m7", new Chord(1, 1, 1, 1));
+        addChord("A#dim", new Chord(1, 0, 1, 3));
+        addChord("A#aug", new Chord(1, 2, 2, 3));
+        addChord("A#6", new Chord(1, 1, 2, 0));
+        addChord("A#maj7", new Chord(0, 1, 2, 3));
+        addChord("A#9", new Chord(3, 4, 2, 3));
+
         addChord("Bb", new Chord(1, 1, 2, 3));
+        addChord("Bb7", new Chord(1, 1, 2, 1));
+        addChord("Bbm", new Chord(1, 1, 1, 3));
+        addChord("Bbm7", new Chord(1, 1, 1, 1));
+        addChord("Bbdim", new Chord(1, 0, 1, 3));
+        addChord("Bbaug", new Chord(1, 2, 2, 3));
+        addChord("Bb6", new Chord(1, 1, 2, 0));
+        addChord("Bbmaj7", new Chord(0, 1, 2, 3));
+        addChord("Bb9", new Chord(3, 4, 2, 3));
+        
         addChord("B", new Chord(2, 2, 3, 4));
+        addChord("B7", new Chord(2, 2, 3, 2));
+        addChord("Bm", new Chord(2, 2, 2, 4));
+        addChord("Bm7", new Chord(2, 2, 2, 2));
+        addChord("Bdim", new Chord(2, 1, 2, 4));
+        addChord("Baug", new Chord(2, 3, 3, 4));
+        addChord("B6", new Chord(2, 2, 3, 1));
+        addChord("Bmaj7", new Chord(1, 2, 3, 4));
+        addChord("B9", new Chord(4, 5, 3, 4));
+
         addChord("Cb", new Chord(2, 2, 3, 4));
+        addChord("Cb7", new Chord(2, 2, 3, 2));
+        addChord("Cbm", new Chord(2, 2, 2, 4));
+        addChord("Cbm7", new Chord(2, 2, 2, 2));
+        addChord("Cbdim", new Chord(2, 1, 2, 4));
+        addChord("Cbaug", new Chord(2, 3, 3, 4));
+        addChord("Cb6", new Chord(2, 2, 3, 1));
+        addChord("Cbmaj7", new Chord(1, 2, 3, 4));
+        addChord("Cb9", new Chord(4, 5, 3, 4));
     }
 
     private void addChord(String key, Chord chord) {
