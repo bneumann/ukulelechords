@@ -3,12 +3,11 @@ package com.newbucket.ukulelechords;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.DrawFilter;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
+
+import com.newbucket.musicxml.Note;
 
 /**
  * Created by benni on 15.10.2015.
@@ -20,7 +19,7 @@ public class UkeFretView extends ImageView{
     private Paint mThinStroke;
     private Paint mNotePaint;
 
-    private Chord mChord;
+//    private Chord mChord;
 
     private final int NUM_FRETS = 5;
     private final int NUM_STRINGS = 4;
@@ -56,11 +55,11 @@ public class UkeFretView extends ImageView{
         mNotePaint.setShadowLayer(12, 0, 0, Color.YELLOW);
     }
 
-    public void SetChord(Chord chord)
-    {
-        mChord = chord;
-        this.invalidate();
-    }
+//    public void SetChord(Chord chord)
+//    {
+//        mChord = chord;
+//        this.invalidate();
+//    }
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -85,11 +84,11 @@ public class UkeFretView extends ImageView{
         {
             canvas.drawLine(i, sideSpace, i, height - sideSpace, mThinStroke);
         }
-        if(mChord != null) {
-            for (Note p : mChord.getNotes()) {
-                canvas.drawCircle(fret * (p.getFret() - 0.5f), (p.getString() - 1) * div + sideSpace, (float) fret * 0.3f, mNotePaint);
-            }
-        }
+//        if(mChord != null) {
+//            for (Note p : mChord.getNotes()) {
+//                canvas.drawCircle(fret * (p.getFret() - 0.5f), (p.getString() - 1) * div + sideSpace, (float) fret * 0.3f, mNotePaint);
+//            }
+//        }
 
         //canvas.rotate(getRotation(), getWidth() / 2, getHeight() / 2);
     }

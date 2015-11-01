@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private ViewGroup mHarmonyMap;
     private UkeFretView mFretView;
     private ChordLib mChordlib;
-    private Chord mCurrentChord;
+//    private Chord mCurrentChord;
 
     private String[] mChordArray = {"C", "D", "E", "F", "G",  "A", "B", SYMBOL_FLAT};
     private String[] mHarmonyArray = {"Reg", "7", "m", "m7", "dim",  "aug", "6", "maj7", "9"};
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         mFretView = (UkeFretView)findViewById(R.id.fret_view);
         mChordlib = new ChordLib();
 
-        mFretView.SetChord(mChordlib.getChord(mKey));
+//        mFretView.SetChord(mChordlib.getChord(mKey));
         mFretView.setOnLongClickListener(new onFretLongCLickListener());
 
         // The tree observer throws this event when the layout has been measured.
@@ -186,8 +186,8 @@ public class MainActivity extends AppCompatActivity {
                     intonation = "#";
                     break;
             }
-            mCurrentChord = mChordlib.getChord(mKey + intonation + mHarmonic);
-            mFretView.SetChord(mCurrentChord);
+//            mCurrentChord = mChordlib.getChord(mKey + intonation + mHarmonic);
+//            mFretView.SetChord(mCurrentChord);
         }
     }
 
