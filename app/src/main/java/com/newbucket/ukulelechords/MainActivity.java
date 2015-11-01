@@ -2,7 +2,6 @@ package com.newbucket.ukulelechords;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -20,6 +19,8 @@ import android.view.MenuItem;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+
+import com.newbucket.controls.UkeFretView;
 
 import java.util.ArrayList;
 

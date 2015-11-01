@@ -1,4 +1,4 @@
-package com.newbucket.ukulelechords;
+package com.newbucket.controls;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -9,6 +9,9 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+
+import com.newbucket.ukulelechords.Chord;
+import com.newbucket.ukulelechords.Note;
 
 /**
  * Created by benni on 15.10.2015.

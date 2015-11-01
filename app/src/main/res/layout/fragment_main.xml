@@ -11,7 +11,7 @@
                 tools:showIn="@layout/activity_main"
                 tools:context=".MainActivityFragment">
 
-    <com.newbucket.ukulelechords.UkeFretView
+    <com.newbucket.controls.UkeFretView
         android:id="@+id/fret_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
