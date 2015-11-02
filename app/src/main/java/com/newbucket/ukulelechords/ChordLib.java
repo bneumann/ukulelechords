@@ -8,7 +8,6 @@ import java.util.HashMap;
  * Created by benni on 16.10.2015.
  */
 public class ChordLib {
-    private static final String TAG = "ChordLib";
 
     private HashMap<String, Chord> mChords;
 

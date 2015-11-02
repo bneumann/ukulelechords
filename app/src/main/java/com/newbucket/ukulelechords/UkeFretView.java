@@ -53,7 +53,6 @@ public class UkeFretView extends ImageView{
         mNotePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mNotePaint.setColor(Color.BLACK);
         mNotePaint.setStrokeWidth(1f);
-        mNotePaint.setShadowLayer(12, 0, 0, Color.YELLOW);
     }
 
     public void SetChord(Chord chord)
