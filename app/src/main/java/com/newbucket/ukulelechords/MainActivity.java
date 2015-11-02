@@ -1,8 +1,10 @@
 package com.newbucket.ukulelechords;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -31,6 +33,8 @@ public class MainActivity extends AppCompatActivity
     private ChordLib mChordlib;
     private Chord mCurrentChord;
 
+    private Context mContext;
+
     private String[] mChordArray = {"C", "D", "E", "F", "G", "A", "B", SYMBOL_FLAT};
     private String[] mHarmonyArray = {"M", "7", "m", "m7", "dim", "aug", "6", "maj7", "9"};
 
@@ -43,6 +47,8 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        mContext = getApplicationContext();
+
         mPieView = (PieChart) findViewById(R.id.pie_menu);
         mFretView = (UkeFretView) findViewById(R.id.fret_view);
 
@@ -51,8 +57,9 @@ public class MainActivity extends AppCompatActivity
         mFretView.SetChord(mChordlib.getChord(mKey));
         mFretView.setOnLongClickListener(new onFretLongCLickListener());
 
-        mPieView.addItem("Test", 10, Color.RED);
-        mPieView.addItem("Test2",10, Color.BLUE);
+        mPieView.addItem("Test", 1, ContextCompat.getColor(mContext, R.color.colorPrimary));
+        mPieView.addItem("Test2", 4, ContextCompat.getColor(mContext, R.color.colorActiveButton));
+        //mPieView.addItem("Test3",5, ContextCompat.getColor(mContext, R.color.colorActiveButton));
 
         FloatingActionButton vAddChords = (FloatingActionButton) findViewById(R.id.addchords);
         vAddChords.setOnClickListener(new View.OnClickListener()

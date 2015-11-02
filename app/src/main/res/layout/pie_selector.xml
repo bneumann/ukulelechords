@@ -9,7 +9,7 @@
 
     <com.newbucket.controls.PieChart
         android:id="@+id/pie_menu"
-        android:layout_width="300dp"
+        android:layout_width="400dp"
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
         />

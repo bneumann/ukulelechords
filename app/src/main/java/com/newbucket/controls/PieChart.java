@@ -662,7 +662,7 @@ public class PieChart extends ViewGroup {
 
         // Set up the paint for the pie slices
         mPiePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mPiePaint.setStyle(Paint.Style.FILL);
+        mPiePaint.setStyle(Paint.Style.FILL_AND_STROKE);
         mPiePaint.setTextSize(mTextHeight);
 
         // Set up the paint for the shadow
@@ -858,19 +858,37 @@ public class PieChart extends ViewGroup {
 
             for (Item it : mData) {
                 mPiePaint.setShader(it.mShader);
-                canvas.drawArc(mBounds,
-                        360 - it.mEndAngle,
-                        it.mEndAngle - it.mStartAngle,
-                        true, mPiePaint);
+//                canvas.drawArc(mBounds,
+//                        360 - it.mEndAngle,
+//                        it.mEndAngle - it.mStartAngle,
+//                        true, mPiePaint);
+
+                Path tmp = new Path();
+                float startAngle = 360 - it.mEndAngle;
+                float endAngle = it.mEndAngle - it.mStartAngle;
+                float outerRadius = mBounds.width() / 2  + mBounds.centerX();
+                float innerRadius = mInnerBounds.width() / 2 + mInnerBounds.centerX();
+                innerRadius = mInnerBounds.width();
+                outerRadius = mBounds.width();
+                //tmp.lineTo(innerRadius * (float) Math.sin(endAngle), innerRadius * (float) Math.cos(endAngle));
+
+                tmp.addArc(mBounds, startAngle, endAngle);
+                tmp.lineTo(innerRadius * (float) Math.cos(Math.toRadians(endAngle)), innerRadius * (float) Math.sin(Math.toRadians(endAngle)));
+                //tmp.addArc(mInnerBounds, startAngle, endAngle);
+
+                canvas.drawPath(tmp, mPiePaint);
             }
         }
 
         @Override
         protected void onSizeChanged(int w, int h, int oldw, int oldh) {
             mBounds = new RectF(0, 0, w, h);
+            float offsetX = mBounds.width() * 0.25f;
+            float offsetY = mBounds.height() * 0.25f;
+            mInnerBounds = new RectF(offsetX, offsetY, w - offsetX, h - offsetY);
         }
 
-        RectF mBounds;
+        RectF mBounds, mInnerBounds;
 
         public void rotateTo(float pieRotation) {
             mRotation = pieRotation;
