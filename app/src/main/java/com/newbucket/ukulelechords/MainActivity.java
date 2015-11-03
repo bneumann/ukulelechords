@@ -187,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
                     intonation = "#";
                     break;
             }
-            String nChord = mKey + mHarmony + intonation;
+            String nChord = mKey + intonation + mHarmony;
             Log.d(TAG, nChord);
             mCurrentChord = mChordlib.getChord(nChord);
             mFretView.SetChord(mCurrentChord);
@@ -200,6 +200,11 @@ public class MainActivity extends AppCompatActivity {
         for (View v : tList) {
             // Print key on buttons
             FloatingActionButton fab = (FloatingActionButton) v;
+            if(fab.getWidth() == 0 || fab.getHeight() == 0)
+            {
+                // As long as there is no landscape version we close the menu here
+                return;
+            }
             Bitmap.Config conf = Bitmap.Config.ARGB_4444; // see other conf types
             Bitmap bmp = Bitmap.createBitmap(fab.getWidth(), fab.getHeight(), conf); // this creates a MUTABLE bitmap
             Canvas canvas = new Canvas(bmp);
