@@ -58,8 +58,10 @@ public class MainActivity extends AppCompatActivity
         mFretView.setOnLongClickListener(new onFretLongCLickListener());
 
         mPieView.addItem("Test", 1, ContextCompat.getColor(mContext, R.color.colorPrimary));
-        mPieView.addItem("Test2", 4, ContextCompat.getColor(mContext, R.color.colorActiveButton));
-        //mPieView.addItem("Test3",5, ContextCompat.getColor(mContext, R.color.colorActiveButton));
+        mPieView.addItem("Test2", 2, ContextCompat.getColor(mContext, R.color.colorActiveButton));
+        mPieView.addItem("Test3",1, ContextCompat.getColor(mContext, R.color.colorPrimaryDark));
+        mPieView.setShowText(true);
+        mPieView.invalidate();
 
         FloatingActionButton vAddChords = (FloatingActionButton) findViewById(R.id.addchords);
         vAddChords.setOnClickListener(new View.OnClickListener()

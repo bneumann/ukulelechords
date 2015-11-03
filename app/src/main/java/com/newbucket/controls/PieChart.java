@@ -459,7 +459,6 @@ public class PieChart extends ViewGroup {
         // on this view's children. PieChart lays out its children in onSizeChanged().
     }
 
-
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -651,6 +650,8 @@ public class PieChart extends ViewGroup {
         // filter won't work.
         setLayerToSW(this);
 
+        setWillNotDraw(false);
+
         // Set up the paint for the label text
         mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mTextPaint.setColor(mTextColor);
@@ -822,7 +823,7 @@ public class PieChart extends ViewGroup {
         private float mRotation = 0;
         private Matrix mTransform = new Matrix();
         private PointF mPivot = new PointF();
-
+        private Path mPath = new Path();
         /**
          * Construct a PieView
          *
@@ -858,25 +859,18 @@ public class PieChart extends ViewGroup {
 
             for (Item it : mData) {
                 mPiePaint.setShader(it.mShader);
-//                canvas.drawArc(mBounds,
-//                        360 - it.mEndAngle,
-//                        it.mEndAngle - it.mStartAngle,
-//                        true, mPiePaint);
-
-                Path tmp = new Path();
                 float startAngle = 360 - it.mEndAngle;
                 float endAngle = it.mEndAngle - it.mStartAngle;
-                float outerRadius = mBounds.width() / 2  + mBounds.centerX();
-                float innerRadius = mInnerBounds.width() / 2 + mInnerBounds.centerX();
-                innerRadius = mInnerBounds.width();
-                outerRadius = mBounds.width();
-                //tmp.lineTo(innerRadius * (float) Math.sin(endAngle), innerRadius * (float) Math.cos(endAngle));
 
-                tmp.addArc(mBounds, startAngle, endAngle);
-                tmp.lineTo(innerRadius * (float) Math.cos(Math.toRadians(endAngle)), innerRadius * (float) Math.sin(Math.toRadians(endAngle)));
-                //tmp.addArc(mInnerBounds, startAngle, endAngle);
+                mPath.reset();
+                // First draw an arc from start to end, then from start+end backwards and close the path afterwards
+                mPath.arcTo(mBounds, startAngle, endAngle, false);
+                mPath.arcTo(mInnerBounds, startAngle + endAngle, -endAngle, false);
+                mPath.close();
 
-                canvas.drawPath(tmp, mPiePaint);
+                canvas.drawPath(mPath, mPiePaint);
+                mTextPaint.setColor(Color.BLACK);
+                canvas.drawText(it.mLabel, 50 , mInnerBounds.centerY(), mTextPaint);
             }
         }
 
