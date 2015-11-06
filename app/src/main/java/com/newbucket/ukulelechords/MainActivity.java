@@ -57,11 +57,13 @@ public class MainActivity extends AppCompatActivity
         mFretView.SetChord(mChordlib.getChord(mKey));
         mFretView.setOnLongClickListener(new onFretLongCLickListener());
 
-        mPieView.addItem("Test", 1, ContextCompat.getColor(mContext, R.color.colorPrimary));
-        mPieView.addItem("Test2", 2, ContextCompat.getColor(mContext, R.color.colorActiveButton));
-        mPieView.addItem("Test3",1, ContextCompat.getColor(mContext, R.color.colorPrimaryDark));
-        mPieView.setShowText(true);
-        mPieView.invalidate();
+        mPieView.addItem("C", 1, ContextCompat.getColor(mContext, R.color.colorActiveButton));
+        mPieView.addItem("D", 1, ContextCompat.getColor(mContext, R.color.colorAccent));
+        mPieView.addItem("E", 1, ContextCompat.getColor(mContext, R.color.colorAccent));
+        mPieView.addItem("F", 1, ContextCompat.getColor(mContext, R.color.colorAccent));
+        mPieView.addItem("G", 1, ContextCompat.getColor(mContext, R.color.colorAccent));
+        mPieView.addItem("A", 1, ContextCompat.getColor(mContext, R.color.colorAccent));
+        mPieView.addItem("B", 1, ContextCompat.getColor(mContext, R.color.colorAccent));
 
         FloatingActionButton vAddChords = (FloatingActionButton) findViewById(R.id.addchords);
         vAddChords.setOnClickListener(new View.OnClickListener()

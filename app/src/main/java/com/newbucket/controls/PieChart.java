@@ -22,6 +22,7 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.*;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.*;
 import android.widget.Scroller;
@@ -606,11 +607,15 @@ public class PieChart extends ViewGroup {
     private void onDataChanged() {
         // When the data changes, we have to recalculate
         // all of the angles.
-        int currentAngle = 0;
+
+        // distance between items
+        int angleSpace = (int)((360.0f / mTotal) * 0.08f);
+        // First item is always in the middle on top
+        int currentAngle = 90 - (int)((360.0f / mTotal) / 2);
         for (Item it : mData) {
             it.mStartAngle = currentAngle;
-            it.mEndAngle = (int) ((float) currentAngle + it.mValue * 360.0f / mTotal);
-            currentAngle = it.mEndAngle;
+            it.mEndAngle = (int) ((float) currentAngle + it.mValue * 360.0f / mTotal) - angleSpace;
+            currentAngle = it.mEndAngle + angleSpace;
 
 
             // Recalculate the gradient shaders. There are
@@ -737,12 +742,13 @@ public class PieChart extends ViewGroup {
 
         // In edit mode it's nice to have some demo data, so add that here.
         if (this.isInEditMode()) {
-            Resources res = getResources();
-            addItem("Annabelle", 3, res.getColor(R.color.colorAccent));
-            addItem("Brunhilde", 4, res.getColor(R.color.colorAccent));
-            addItem("Carolina", 2, res.getColor(R.color.colorAccent));
-            addItem("Dahlia", 3, res.getColor(R.color.colorAccent));
-            addItem("Ekaterina", 1, res.getColor(R.color.colorActiveButton));
+            addItem("C", 1, ContextCompat.getColor(this.getContext(), R.color.colorActiveButton));
+            addItem("D", 1, ContextCompat.getColor(this.getContext(), R.color.colorAccent));
+            addItem("E", 1, ContextCompat.getColor(this.getContext(), R.color.colorAccent));
+            addItem("F", 1, ContextCompat.getColor(this.getContext(), R.color.colorAccent));
+            addItem("G", 1, ContextCompat.getColor(this.getContext(), R.color.colorAccent));
+            addItem("A", 1, ContextCompat.getColor(this.getContext(), R.color.colorAccent));
+            addItem("B", 1, ContextCompat.getColor(this.getContext(), R.color.colorAccent));
         }
 
     }
