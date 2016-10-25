@@ -1,13 +1,11 @@
 package com.newbucket.ukulelechords;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
@@ -17,13 +15,15 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+{
 
     private final String SYMBOL_FLAT = "\u266D";
     private final String SYMBOL_NATURAL = "\u266E";
@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
     public String TAG = "MainActivity";
 
-    protected String mKey ="C";
+    protected String mKey = "C";
     protected String mIntonation = SYMBOL_NATURAL;
     protected String mHarmony = "";
 
@@ -44,8 +44,12 @@ public class MainActivity extends AppCompatActivity {
     private String[] mChordArray = {"C", "D", "E", "F", "G", "A", "B", SYMBOL_FLAT};
     private String[] mHarmonyArray = {"M", "7", "m", "m7", "dim", "aug", "6", "maj7", "9"};
 
+    private boolean mChordsOpen, mKeysOpen;
+    private Animation mAnimationOpen, mAnimationClose;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -56,14 +60,22 @@ public class MainActivity extends AppCompatActivity {
         mFretView = (UkeFretView) findViewById(R.id.fret_view);
         mChordlib = new ChordLib();
 
+        mAnimationOpen = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
+        mAnimationClose = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
+
+        mChordsOpen = false;
+        mKeysOpen = false;
+
         mFretView.SetChord(mChordlib.getChord(mKey));
         mFretView.setOnLongClickListener(new onFretLongCLickListener());
 
         // The tree observer throws this event when the layout has been measured.
         ViewTreeObserver vto = mChordMap.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener()
+        {
             @Override
-            public void onGlobalLayout() {
+            public void onGlobalLayout()
+            {
                 // draw keys on hidden chord map layout
                 drawKeys();
                 // draw harmonies on hidden harmony layout
@@ -72,30 +84,55 @@ public class MainActivity extends AppCompatActivity {
         });
 
         FloatingActionButton vAddHarmonies = (FloatingActionButton) findViewById(R.id.addharms);
-        vAddHarmonies.setOnClickListener(new View.OnClickListener() {
+        vAddHarmonies.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View view) {
-                hide(mHarmonyMap);
-                toggleVisibility(mChordMap);
+            public void onClick(View view)
+            {
+                if(mKeysOpen) {
+                    hide(mHarmonyMap);
+                    mKeysOpen = !mKeysOpen;
+                }
+                if(!mChordsOpen) {
+                    reveal(mChordMap);
+                }
+                else
+                {
+                    hide(mChordMap);
+                }
+                mChordsOpen = !mChordsOpen;
             }
         });
 
         FloatingActionButton vAddChords = (FloatingActionButton) findViewById(R.id.addchords);
-        vAddChords.setOnClickListener(new View.OnClickListener() {
+        vAddChords.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-                hide(mChordMap);
-                toggleVisibility(mHarmonyMap);
+            public void onClick(View view)
+            {
+                if(mChordsOpen) {
+                    hide(mChordMap);
+                    mChordsOpen = !mChordsOpen;
+                }
+                if(!mKeysOpen) {
+                    reveal(mHarmonyMap);
+                }
+                else
+                {
+                    hide(mHarmonyMap);
+                }
+                mKeysOpen = !mKeysOpen;
             }
         });
     }
 
 
-    private void drawKeys() {
+    private void drawKeys()
+    {
         ArrayList<View> tList = getAllChildren(mChordMap);
         int counter = 0;
-        for (View v : tList) {
+        for (View v : tList)
+        {
             // Print key on buttons
             FloatingActionButton fab = (FloatingActionButton) v;
             Bitmap.Config conf = Bitmap.Config.ARGB_4444; // see other conf types
@@ -108,14 +145,19 @@ public class MainActivity extends AppCompatActivity {
             p.setElegantTextHeight(true);
             p.setAntiAlias(true);
             // Draw keys
-            if (counter != tList.size() - 1) {
+            if (counter != tList.size() - 1)
+            {
                 // Remove natural sign if intonation is natural because it looks weird.
-                if (mIntonation.equals(SYMBOL_NATURAL)) {
+                if (mIntonation.equals(SYMBOL_NATURAL))
+                {
                     t.drawText(mChordArray[counter], 5, 20, p);
-                } else {
+                }
+                else
+                {
                     t.drawText(mChordArray[counter] + mIntonation, 0, 20, p);
                 }
-            } else // Draw intonation symbol
+            }
+            else // Draw intonation symbol
             {
                 t.drawText(mChordArray[counter], 8, 20, p);
             }
@@ -128,24 +170,30 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private class onFretLongCLickListener implements View.OnLongClickListener {
+    private class onFretLongCLickListener implements View.OnLongClickListener
+    {
         @Override
-        public boolean onLongClick(View v) {
+        public boolean onLongClick(View v)
+        {
             Log.d(TAG, "Long click detected");
             return true;
         }
     }
 
-    private class onKeyClickListener implements View.OnClickListener {
+    private class onKeyClickListener implements View.OnClickListener
+    {
         @Override
-        public void onClick(View v) {
+        public void onClick(View v)
+        {
             FloatingActionButton fab = (FloatingActionButton) v;
             String key = (String) v.getTag(R.id.tag_key_chord);
             String harm = (String) v.getTag(R.id.tag_key_harmony);
             if (key != null)
             {
-                if (key.equals(SYMBOL_SHARP) || key.equals(SYMBOL_FLAT) || key.equals(SYMBOL_NATURAL)) {
-                    switch (mIntonation) {
+                if (key.equals(SYMBOL_SHARP) || key.equals(SYMBOL_FLAT) || key.equals(SYMBOL_NATURAL))
+                {
+                    switch (mIntonation)
+                    {
                         case SYMBOL_NATURAL:
                             mIntonation = SYMBOL_FLAT;
                             mChordArray[mChordArray.length - 1] = SYMBOL_SHARP;
@@ -165,18 +213,19 @@ public class MainActivity extends AppCompatActivity {
                 {
                     mKey = key;
                     resetBackgroundColor(mChordMap);
-                    fab.setBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(),R.color.colorActiveButton));
                 }
             }
-            if(harm != null)
+            if (harm != null)
             {
                 // Chordlib has no "M" extension
                 harm = harm.equals("M") ? "" : harm;
                 mHarmony = harm;
+                resetBackgroundColor(mHarmonyMap);
             }
             // TODO: This is crappy code. Oh yeah. Rewrite the whole intonation-symbol thingy
             String intonation = "";
-            switch (mIntonation) {
+            switch (mIntonation)
+            {
                 case SYMBOL_NATURAL:
                     intonation = "";
                     break;
@@ -191,16 +240,19 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, nChord);
             mCurrentChord = mChordlib.getChord(nChord);
             mFretView.SetChord(mCurrentChord);
+            fab.setBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.colorActiveButton));
         }
     }
 
-    private void drawHarmonies() {
+    private void drawHarmonies()
+    {
         ArrayList<View> tList = getAllChildren(mHarmonyMap);
         int counter = 0;
-        for (View v : tList) {
+        for (View v : tList)
+        {
             // Print key on buttons
             FloatingActionButton fab = (FloatingActionButton) v;
-            if(fab.getWidth() == 0 || fab.getHeight() == 0)
+            if (fab.getWidth() == 0 || fab.getHeight() == 0)
             {
                 // As long as there is no landscape version we close the menu here
                 return;
@@ -233,81 +285,79 @@ public class MainActivity extends AppCompatActivity {
     private void resetBackgroundColor(ViewGroup buttonGroup)
     {
         ArrayList<View> tList = getAllChildren(buttonGroup);
-        for (View b : tList) {
+        for (View b : tList)
+        {
             b.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.colorAccent));
         }
     }
 
-    private ArrayList<View> getAllChildren(ViewGroup group) {
+    private ArrayList<View> getAllChildren(ViewGroup group)
+    {
         ArrayList<View> reply = new ArrayList<View>();
-        for (int i = 0; i < group.getChildCount(); i++) {
+        for (int i = 0; i < group.getChildCount(); i++)
+        {
             View v = group.getChildAt(i);
-            if (v instanceof ViewGroup) {
+            if (v instanceof ViewGroup)
+            {
                 reply.addAll(getAllChildren((ViewGroup) v));
-            } else if (v instanceof View) {
+            }
+            else if (v instanceof View)
+            {
                 reply.add(v);
             }
         }
         return reply;
     }
 
-    private void toggleVisibility(View targetView) {
-        // make the view visible and start the animation
-        if (targetView.getVisibility() == View.INVISIBLE) {
-            reveal(targetView);
-        } else {
-            hide(targetView);
+    private void reveal(ViewGroup targetView)
+    {
+        ArrayList<View> tList = getAllChildren(targetView);
+        for (View v : tList)
+        {
+            reveal(v);
         }
-
     }
 
-    private void reveal(View targetView) {
-        // get the center for the clipping circle
-        int cx = targetView.getWidth() / 2;
-        int cy = targetView.getHeight() / 2;
-
-        // get the final radius for the clipping circle
-        int finalRadius = Math.max(targetView.getWidth(), targetView.getHeight());
-        Animator anim = ViewAnimationUtils.createCircularReveal(targetView, cx, cy, 0, finalRadius);
-        targetView.setVisibility(View.VISIBLE);
-        anim.start();
+    private void reveal(final View targetView)
+    {
+        Log.i(TAG, "Starting 'show' animation");
+        targetView.startAnimation(mAnimationOpen);
     }
 
-    private void hide(final View targetView) {
-        // get the center for the clipping circle
-        int cx = targetView.getWidth() / 2;
-        int cy = targetView.getHeight() / 2;
+    private void hide(ViewGroup targetView)
+    {
+        ArrayList<View> tList = getAllChildren(targetView);
+        for (View v : tList)
+        {
+            hide(v);
+        }
+    }
 
-        // get the final radius for the clipping circle
-        int finalRadius = Math.max(targetView.getWidth(), targetView.getHeight());
-        Animator anim = ViewAnimationUtils.createCircularReveal(targetView, cx, cy, finalRadius, 0);
-        anim.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                targetView.setVisibility(View.INVISIBLE);
-            }
-        });
-
-        anim.start();
+    private void hide(final View targetView)
+    {
+        Log.i(TAG, String.format("Starting 'close' animation [View: %d]", targetView.getId()));
+        targetView.startAnimation(mAnimationClose);
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_settings)
+        {
             return true;
         }
 
