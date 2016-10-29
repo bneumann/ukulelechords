@@ -322,6 +322,7 @@ public class MainActivity extends AppCompatActivity
     {
         Log.i(TAG, "Starting 'show' animation");
         targetView.startAnimation(mAnimationOpen);
+        targetView.setClickable(true);
     }
 
     private void hide(ViewGroup targetView)
@@ -337,6 +338,7 @@ public class MainActivity extends AppCompatActivity
     {
         Log.i(TAG, String.format("Starting 'close' animation [View: %d]", targetView.getId()));
         targetView.startAnimation(mAnimationClose);
+        targetView.setClickable(false);
     }
 
     @Override
