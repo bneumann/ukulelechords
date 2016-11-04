@@ -4,13 +4,15 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.ArrayAdapter;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
@@ -52,8 +54,24 @@ public class MainActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+
+        // FIXME: Implement accoring to https://developer.android.com/training/implementing-navigation/nav-drawer.html
+//        String[] mPlanetTitles = new String[]{"Test", "Bla"};
+//        DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        ListView mDrawerList = (ListView) findViewById(R.id.left_drawer);
+//
+//        // Set the adapter for the list view
+//        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
+//                android.R.layout.simple_list_item_1, mPlanetTitles));
+//        // Set the list's click listener
+//        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener()
+//        {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+//            {
+//
+//            }
+//        });
 
         mChordMap = (ViewGroup) findViewById(R.id.chord_map);
         mHarmonyMap = (ViewGroup) findViewById(R.id.harm_map);
@@ -68,6 +86,9 @@ public class MainActivity extends AppCompatActivity
 
         mFretView.SetChord(mChordlib.getChord(mKey));
         mFretView.setOnLongClickListener(new onFretLongCLickListener());
+
+        FloatingActionButton changeAccidental = (FloatingActionButton) findViewById(R.id.change_accidental);
+        changeAccidental.setOnClickListener(new onChangeAccidental());
 
         // The tree observer throws this event when the layout has been measured.
         ViewTreeObserver vto = mChordMap.getViewTreeObserver();
@@ -126,7 +147,6 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-
     private void drawKeys()
     {
         ArrayList<View> tList = getAllChildren(mChordMap);
@@ -135,38 +155,24 @@ public class MainActivity extends AppCompatActivity
         {
             // Print key on buttons
             FloatingActionButton fab = (FloatingActionButton) v;
-            Bitmap.Config conf = Bitmap.Config.ARGB_4444; // see other conf types
-            Bitmap bmp = Bitmap.createBitmap(24, 24, conf); // this creates a MUTABLE bitmap
-            Canvas t = new Canvas(bmp);
-            Paint p = new Paint();
-            p.setColor((Color.WHITE));
-            p.setTextSize(20);
-            p.setStrokeWidth(12);
-            p.setElegantTextHeight(true);
-            p.setAntiAlias(true);
-            // Draw keys
+            Bitmap tmpBitmap;
+            // Draw only regular key, not the accidental changer
             if (counter != tList.size() - 1)
             {
                 // Remove natural sign if intonation is natural because it looks weird.
                 if (mIntonation.equals(SYMBOL_NATURAL))
                 {
-                    t.drawText(mChordArray[counter], 5, 20, p);
+                    tmpBitmap = textAsBitmap(mChordArray[counter], fab.getHeight() * 0.75f, Color.WHITE);
                 }
                 else
                 {
-                    t.drawText(mChordArray[counter] + mIntonation, 0, 20, p);
+                    tmpBitmap = textAsBitmap(mChordArray[counter] + mIntonation, fab.getHeight() * 0.75f, Color.WHITE);
                 }
+                // TODO: Use drawables
+                fab.setImageBitmap(tmpBitmap);
+                fab.setOnClickListener(new onKeyClickListener());
+                fab.setTag(R.id.tag_key_chord, mChordArray[counter++]);
             }
-            else // Draw intonation symbol
-            {
-                t.drawText(mChordArray[counter], 8, 20, p);
-            }
-
-            // TODO: Use drawables
-            fab.setImageBitmap(bmp);
-            fab.setTag(R.id.tag_key_chord, mChordArray[counter++]);
-
-            fab.setOnClickListener(new onKeyClickListener());
         }
     }
 
@@ -177,6 +183,38 @@ public class MainActivity extends AppCompatActivity
         {
             Log.d(TAG, "Long click detected");
             return true;
+        }
+    }
+
+    private class onChangeAccidental implements View.OnClickListener
+    {
+        private int mIcon;
+
+        @Override
+        public void onClick(View v)
+        {
+            Log.d(TAG, String.format("Switching state to %s", mIntonation));
+            switch(mIntonation)
+            {
+                case SYMBOL_NATURAL:
+                    mIcon = R.drawable.ic_key_up; // < next Icon
+                    mIntonation = SYMBOL_FLAT; // current State
+                    break;
+                case SYMBOL_FLAT:
+                    mIcon = R.drawable.ic_key_reset;
+                    mIntonation = SYMBOL_SHARP;
+                    break;
+                case SYMBOL_SHARP:
+                    mIcon = R.drawable.ic_key_down;
+                    mIntonation = SYMBOL_NATURAL;
+                    break;
+                default:
+                    mIcon = R.drawable.ic_key_down;
+                    mIntonation = SYMBOL_NATURAL;
+                    break;
+            }
+            ((FloatingActionButton)v).setImageResource(mIcon);
+            drawKeys();
         }
     }
 
@@ -195,15 +233,12 @@ public class MainActivity extends AppCompatActivity
                     switch (mIntonation)
                     {
                         case SYMBOL_NATURAL:
-                            mIntonation = SYMBOL_FLAT;
                             mChordArray[mChordArray.length - 1] = SYMBOL_SHARP;
                             break;
                         case SYMBOL_FLAT:
-                            mIntonation = SYMBOL_SHARP;
                             mChordArray[mChordArray.length - 1] = SYMBOL_NATURAL;
                             break;
                         case SYMBOL_SHARP:
-                            mIntonation = SYMBOL_NATURAL;
                             mChordArray[mChordArray.length - 1] = SYMBOL_FLAT;
                             break;
                     }
@@ -240,7 +275,7 @@ public class MainActivity extends AppCompatActivity
             Log.d(TAG, nChord);
             mCurrentChord = mChordlib.getChord(nChord);
             mFretView.SetChord(mCurrentChord);
-            fab.setBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.colorActiveButton));
+            fab.setBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.colorButtonActive));
         }
     }
 
@@ -257,29 +292,26 @@ public class MainActivity extends AppCompatActivity
                 // As long as there is no landscape version we close the menu here
                 return;
             }
-            Bitmap.Config conf = Bitmap.Config.ARGB_4444; // see other conf types
-            Bitmap bmp = Bitmap.createBitmap(fab.getWidth(), fab.getHeight(), conf); // this creates a MUTABLE bitmap
-            Canvas canvas = new Canvas(bmp);
-            Paint p = new Paint();
-            p.setColor((Color.WHITE));
-            p.setTextSize(fab.getHeight() * 0.60f);
-            //p.setStrokeWidth(12);
-            p.setElegantTextHeight(true);
-            p.setAntiAlias(true);
-
-            Rect bounds = new Rect();
-            p.getTextBounds(mHarmonyArray[counter], 0, mHarmonyArray[counter].length(), bounds);
-            int xPos = (canvas.getWidth() / 2) - (bounds.width() / 2);
-            int yPos = (int) ((fab.getHeight() / 2) - ((p.descent() + p.ascent()) / 2));
-            // Draw harmonies
-            canvas.drawText(mHarmonyArray[counter], xPos, yPos, p);
-
-            // TODO: Use drawables
-            fab.setImageBitmap(bmp);
+            fab.setImageBitmap(textAsBitmap(mHarmonyArray[counter], fab.getHeight() * 0.75f, Color.WHITE));
             fab.setTag(R.id.tag_key_harmony, mHarmonyArray[counter++]);
 
             fab.setOnClickListener(new onKeyClickListener());
         }
+    }
+
+    public static Bitmap textAsBitmap(String text, float textSize, int textColor) {
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setTextSize(textSize);
+        paint.setColor(textColor);
+        paint.setTextAlign(Paint.Align.LEFT);
+        float baseline = -paint.ascent(); // ascent() is negative
+        int width = (int) (paint.measureText(text) + 0.0f); // round
+        int height = (int) (baseline + paint.descent() + 0.0f);
+        Bitmap image = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(image);
+        canvas.drawText(text, 0, baseline, paint);
+        return image;
     }
 
     private void resetBackgroundColor(ViewGroup buttonGroup)
@@ -287,7 +319,7 @@ public class MainActivity extends AppCompatActivity
         ArrayList<View> tList = getAllChildren(buttonGroup);
         for (View b : tList)
         {
-            b.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.colorAccent));
+            b.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.colorButton));
         }
     }
 
