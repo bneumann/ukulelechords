@@ -32,17 +32,11 @@ public class Note {
         return Scale.ParseInteger(mNote);
     }
 
-    public void transpose(int value)
+    public Note transpose(int value)
     {
         mNote += value;
-        while(mNote > Scale.Max)
-        {
-            mNote -= Scale.length;
-        }
-        while(mNote < Scale.Min)
-        {
-            mNote += Scale.length;
-        }
+        mNote = mNote % Scale.length;
+        mNote = mNote < 0 ? mNote += Scale.length : mNote;
+        return this;
     }
-
 }

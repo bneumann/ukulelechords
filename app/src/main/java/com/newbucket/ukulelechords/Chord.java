@@ -30,16 +30,18 @@ public class Chord
         mNotes.add(new Note(mod.mod));
     }
 
-    public void transpose(Note rootNote)
+    public Chord transpose(Note rootNote)
     {
         this.transpose(rootNote.GetNote());
+        return this;
     }
 
-    public void transpose(int value)
+    public Chord transpose(int value)
     {
         for(Note n : mNotes) {
             n.transpose(value);
         }
+        return this;
     }
 
     public int[] GetNoteValues() {
@@ -56,15 +58,17 @@ public class Chord
         return mNotes;
     }
 
-    public void AddNote(Note n)
+    public Chord AddNote(Note n)
     {
         mNotes.add(n);
+        return this;
     }
 
-    public void AddModifier(Modifier mod){
+    public Chord AddModifier(Modifier mod){
         Note n = new Note(mNotes.get(0).GetNote());
         n.transpose(mod.mod);
         mNotes.add(n);
+        return this;
     }
 
     public void addNotes(int firstString, int secondString, int thirdString, int fourthString) {

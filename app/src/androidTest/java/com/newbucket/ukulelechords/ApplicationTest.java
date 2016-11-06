@@ -2,11 +2,6 @@ package com.newbucket.ukulelechords;
 
 import android.test.AndroidTestCase;
 
-import java.io.Console;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-
 /**
  * <a href="http://d.android.com/tools/testing/testing_android.html">Testing Fundamentals</a>
  */
@@ -80,10 +75,17 @@ public class ApplicationTest extends AndroidTestCase{
 
     public void testChordFinder()
     {
-        Chord c = new Chord(Chord.Base.Major, Chord.Modifier.Seven);
+        Chord c = new Chord(Chord.Base.Major);
         Tuning t = new Tuning(Tuning.StandardTypes.Concert);
 
         ChordFinder cf = new ChordFinder(t, c);
+        assertEquals("G fret is 0", 0, cf.GetFretValues()[0]);
+        assertEquals("C fret is 0", 0, cf.GetFretValues()[1]);
+        assertEquals("E fret is 0", 0, cf.GetFretValues()[2]);
+        assertEquals("A fret is 3", 3, cf.GetFretValues()[3]);
+
+        c.AddModifier(Chord.Modifier.Seven);
+        cf.UpdateFretValues();
         assertEquals("G fret is 0", 0, cf.GetFretValues()[0]);
         assertEquals("C fret is 0", 0, cf.GetFretValues()[1]);
         assertEquals("E fret is 0", 0, cf.GetFretValues()[2]);
