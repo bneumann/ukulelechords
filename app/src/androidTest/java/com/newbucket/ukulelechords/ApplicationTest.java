@@ -19,78 +19,98 @@ public class ApplicationTest extends AndroidTestCase{
         super.tearDown();
     }
 
-    public void testNotesByName(){
-        Note n  = new Note("C", "G");
-        assertEquals(5, n.getFret());
+    public void testNoteTranspose()
+    {
+        Note n = new Note();
+        assertEquals("Note initialized as 0", 0, n.GetNote());
 
-        n  = new Note("D", "C");
-        assertEquals(2, n.getFret());
+        n.transpose(5);
+        assertEquals("Note transposed to 5", 5, n.GetNote());
 
-        n  = new Note("G", "C");
-        assertEquals(7, n.getFret());
+        n.transpose(-4);
+        assertEquals("Note transposed to 1", 1, n.GetNote());
+
+        n.transpose(-4);
+        assertEquals("Note transposed to 9", 9, n.GetNote());
+
+        n.transpose(24);
+        assertEquals("Note transposed two octaves up", 9, n.GetNote());
+
+        n.transpose(-36);
+        assertEquals("Note transposed three octaves down", 9, n.GetNote());
     }
 
-    public void testNotesByFret(){
-        Note n  = new Note("C", 2);
-        assertEquals(2, n.getFret());
-        assertEquals(3, n.getString());
+    // NOTE: Legacy tests. Quite uneccesary because of new implementation
+    public void testNotesByName(){
+        Note n  = new Note("C");
+        assertEquals(0, n.GetNote());
 
-        n  = new Note("G", 2);
-        assertEquals(2, n.getFret());
-        assertEquals(4, n.getString());
+        n  = new Note("D");
+        assertEquals(2, n.GetNote());
+
+        n  = new Note("Bb");
+        assertEquals(10, n.GetNote());
+    }
+
+    public void testChord(){
+        Chord c = new Chord(Chord.Base.Major);
+
+        assertEquals("Major chord created", 3, c.GetNoteValues().length);
+
+        assertEquals("Root note 0", 0, c.GetNoteValues()[0]);
+        assertEquals("Second note 4", 4, c.GetNoteValues()[1]);
+        assertEquals("Third note 7", 7, c.GetNoteValues()[2]);
+
+        c.transpose(6);
+
+        assertEquals("Root note 6", 6, c.GetNoteValues()[0]);
+        assertEquals("Second note 10", 10, c.GetNoteValues()[1]);
+        assertEquals("Third note 1", 1, c.GetNoteValues()[2]);
+
+        assertEquals("Root note is F#", "F#", c.GetNotes().get(0).toString());
+        assertEquals("Root note is A#", "A#", c.GetNotes().get(1).toString());
+        assertEquals("Root note is C#", "C#", c.GetNotes().get(2).toString());
+
+        c.AddModifier(Chord.Modifier.Seven);
+        assertEquals("Added the Seven modifier", 4, c.GetNoteValues().length);
+
+        assertEquals("Seven note is 4", 4, c.GetNoteValues()[3]);
+        assertEquals("Seven note is E", "E", c.GetNotes().get(3).toString());
     }
 
     public void testChordFinder()
     {
-        String[] aChordIn = new String[]{"C", "G", "E"};
-        ArrayList<String[]> ret = TestUtils.testAutomaticChords(aChordIn);
-        aChordIn = ret.get(0);
-        String[] aChordOut = ret.get(1);
-        for(int i = 0; i < aChordIn.length; i++)
-        {
-            assertEquals(aChordIn[i], aChordOut[i]);
-        }
+        Chord c = new Chord(Chord.Base.Major, Chord.Modifier.Seven);
+        Tuning t = new Tuning(Tuning.StandardTypes.Concert);
 
-        aChordIn = new String[]{"C#", "F", "G#"};
-        ret = TestUtils.testAutomaticChords(aChordIn);
-        aChordIn = ret.get(0);
-        aChordOut = ret.get(1);
-        for(int i = 0; i < aChordIn.length; i++)
-        {
-            assertEquals(aChordIn[i], aChordOut[i]);
-        }
-
-        aChordIn = new String[]{"Eb", "G", "Bb"};
-        ret = TestUtils.testAutomaticChords(aChordIn);
-        aChordIn = ret.get(0);
-        aChordOut = ret.get(1);
-        for(int i = 0; i < aChordIn.length; i++)
-        {
-            assertEquals(aChordIn[i], aChordOut[i]);
-        }
+        ChordFinder cf = new ChordFinder(t, c);
+        assertEquals("G fret is 0", 0, cf.GetFretValues()[0]);
+        assertEquals("C fret is 0", 0, cf.GetFretValues()[1]);
+        assertEquals("E fret is 0", 0, cf.GetFretValues()[2]);
+        assertEquals("A fret is 2", 2, cf.GetFretValues()[3]);
     }
-
-    public void testReturnNoteString()
-    {
-        Note n  = new Note("G", "C");
-        assertEquals("G", n.toString());
-    }
-
-    public void testNextInScale()
-    {
-        System.out.println("Testing the next in scale function");
-        Note tmp = new Note();
-        String res = tmp.getNextInScale("C");
-        assertEquals("Checking for sharp flat", "C#", res);
-
-        res = tmp.getNextInScale("C#");
-        assertEquals("D", res);
-
-        res = tmp.getNextInScale("Db");
-        assertEquals("Checking for flat scale", "D", res);
-
-        res = tmp.getNextInScale("B");
-        assertEquals("Checking for overflow", "C", res);
-    }
+//
+//    public void testReturnNoteString()
+//    {
+//        Note n  = new Note("G", "C");
+//        assertEquals("G", n.toString());
+//    }
+//
+//    public void testNextInScale()
+//    {
+//        System.out.println("Testing the next in scale function");
+//        Note tmp = new Note();
+//        String res = tmp.getNextInScale("C");
+//        assertEquals("Checking for sharp flat", "C#", res);
+//
+//        res = tmp.getNextInScale("C#");
+//        assertEquals("D", res);
+//
+//        res = tmp.getNextInScale("Db");
+//        assertEquals("Checking for flat scale", "D", res);
+//
+//        res = tmp.getNextInScale("B");
+//        assertEquals("Checking for overflow", "C", res);
+//    }
 }
 

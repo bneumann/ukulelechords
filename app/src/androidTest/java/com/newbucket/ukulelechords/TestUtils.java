@@ -15,7 +15,7 @@ public class TestUtils
         Chord chord = new Chord(aChordIn);
 
         ArrayList<String> cNotes = new ArrayList<>();
-        for(Note n : chord.getNotes())
+        for(Note n : chord.GetNotes())
         {
             cNotes.add(n.toString());
         }

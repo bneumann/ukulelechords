@@ -85,8 +85,8 @@ public class UkeFretView extends ImageView{
             canvas.drawLine(i, sideSpace, i, height - sideSpace, mThinStroke);
         }
         if(mChord != null) {
-            for (Note p : mChord.getNotes()) {
-                canvas.drawCircle(fret * (p.getFret() - 0.5f), (p.getString() - 1) * div + sideSpace, (float) fret * 0.3f, mNotePaint);
+            for (Note p : mChord.GetNotes()) {
+//                canvas.drawCircle(fret * (p.getFret() - 0.5f), (p.getString() - 1) * div + sideSpace, (float) fret * 0.3f, mNotePaint);
             }
         }
 
