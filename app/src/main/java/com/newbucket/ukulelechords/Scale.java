@@ -23,7 +23,7 @@ public class Scale
     public static int ParseString(String notename)
     {
         int res = -1;
-        for(int i = 0; i < Scale.Max; i++) {
+        for(int i = 0; i < Scale.length; i++) {
             if (maScale[0][i].equals(notename) || maScale[1][i].equals(notename)){
                 res = i;
                 break;

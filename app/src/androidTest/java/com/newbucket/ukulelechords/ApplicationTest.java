@@ -71,6 +71,12 @@ public class ApplicationTest extends AndroidTestCase{
 
         assertEquals("Seven note is 4", 4, c.GetNoteValues()[3]);
         assertEquals("Seven note is E", "E", c.GetNotes().get(3).toString());
+
+        c.transpose(-7);
+
+        assertEquals("Root note 11", 11, c.GetNoteValues()[0]);
+        assertEquals("Second note 3", 3, c.GetNoteValues()[1]);
+        assertEquals("Third note 6", 6, c.GetNoteValues()[2]);
     }
 
     public void testChordFinder()
@@ -84,11 +90,20 @@ public class ApplicationTest extends AndroidTestCase{
         assertEquals("E fret is 0", 0, cf.GetFretValues()[2]);
         assertEquals("A fret is 3", 3, cf.GetFretValues()[3]);
 
+
         c.AddModifier(Chord.Modifier.Seven);
         cf.UpdateFretValues();
         assertEquals("G fret is 0", 0, cf.GetFretValues()[0]);
         assertEquals("C fret is 0", 0, cf.GetFretValues()[1]);
         assertEquals("E fret is 0", 0, cf.GetFretValues()[2]);
+        assertEquals("A fret is 1", 1, cf.GetFretValues()[3]);
+
+        c.transpose(7);
+        c.RemoveModifier();
+        cf.UpdateFretValues();
+        assertEquals("G fret is 0", 0, cf.GetFretValues()[0]);
+        assertEquals("C fret is 2", 2, cf.GetFretValues()[1]);
+        assertEquals("E fret is 3", 3, cf.GetFretValues()[2]);
         assertEquals("A fret is 2", 2, cf.GetFretValues()[3]);
     }
 //

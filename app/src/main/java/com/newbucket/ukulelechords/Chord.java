@@ -6,15 +6,15 @@ import java.util.Arrays;
 /**
  * Created by benni on 16.10.2015.
  */
-public class Chord
+public class Chord extends ArrayList<Note>
 {
-    private ArrayList<Note> mNotes = new ArrayList<>();
+//    private ArrayList<Note> mNotes = new ArrayList<>();
 
     public Chord(Base chord)
     {
-        mNotes.add(new Note(chord.first));
-        mNotes.add(new Note(chord.second));
-        mNotes.add(new Note(chord.third));
+        add(new Note(chord.first));
+        add(new Note(chord.second));
+        add(new Note(chord.third));
     }
 
 
@@ -27,7 +27,13 @@ public class Chord
     public Chord(Base chord, Modifier mod)
     {
         this(chord);
-        mNotes.add(new Note(mod.mod));
+        add(new Note(mod.mod));
+    }
+
+    public Chord(Base chord, Note rootNote, Modifier mod)
+    {
+        this(chord, mod);
+        transpose(rootNote);
     }
 
     public Chord transpose(Note rootNote)
@@ -38,81 +44,78 @@ public class Chord
 
     public Chord transpose(int value)
     {
-        for(Note n : mNotes) {
+        for(Note n : this) {
             n.transpose(value);
         }
         return this;
     }
 
     public int[] GetNoteValues() {
-        int[] res = new int[mNotes.size()];
+        int[] res = new int[this.size()];
         for(int i = 0; i < res.length; i++)
         {
-            res[i] = mNotes.get(i).GetNote();
+            res[i] = this.get(i).GetNote();
         }
         return res;
     }
 
     public ArrayList<Note> GetNotes()
     {
-        return mNotes;
-    }
-
-    public Chord AddNote(Note n)
-    {
-        mNotes.add(n);
         return this;
     }
 
     public Chord AddModifier(Modifier mod){
-        Note n = new Note(mNotes.get(0).GetNote());
+        Note n = new Note(this.get(0).GetNote());
         n.transpose(mod.mod);
-        mNotes.add(n);
+        this.add(n);
         return this;
     }
 
-    public void addNotes(int firstString, int secondString, int thirdString, int fourthString) {
-//        addNote(new Note("A", firstString));
-//        addNote(new Note("E", secondString));
-//        addNote(new Note("C", thirdString));
-//        addNote(new Note("G", fourthString));
+    public void RemoveModifier() {
+        while(this.size() > 3) {
+            this.remove(this.size() - 1);
+        }
     }
 
-
-    //FIXME: Works only with sharp scale at the moment
-    public Chord(String[] notes)
+    @Override
+    public boolean add(Note note)
     {
-//        // str: "C", "G", "E"
-//        Note tmp = new Note();
-//        String[] tuning = null; //tmp.getTuning();
-//        String[] base = tuning.clone();
-//        // tuning: "G", "C", "E", "A"
-//        int i = 0;
-//        int foundFrets = 0;
-//        while(i < 20)
-//        {
-//            for (int t = 0; t < tuning.length; t++)
-//            {
-//                if(foundFrets == 0xF)
-//                {
-//                    return;
-//                }
-//                // Check only unfound notes
-//                if((foundFrets & (1 << t)) == 0)
-//                {
-//                    int idx = Arrays.asList(notes).indexOf(tuning[t]);
-//                    if(idx >= 0)
-//                    {
-//                        addNote(new Note(notes[idx], base[t]));
-//                        foundFrets |= (1 << t);
-//                    }
-//                }
-//                tuning[t] = tmp.getNextInScale(tuning[t]);
-//            }
-//            i++;
-//        }
+        boolean ret = false;
+        if(!this.contains(note)) {
+            ret = super.add(note);
+        }
+        return ret;
     }
 
+    @Override
+    public boolean contains(Object o)
+    {
+        boolean ret = false;
+        if(!(o instanceof Note)) {
+            return false;
+        }
+        for (Note n : this)
+        {
+            if(n.GetNote() == ((Note)o).GetNote()){
+                ret = true;
+                break;
+            }
+        }
+        return ret;
+    }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (Note n : this)
+        {
+            sb.append(n.toString());
+            if(this.indexOf(n) != this.size() - 1)
+            {
+                sb.append(", ");
+            }
+        }
+        return sb.toString();
+    }
 
     public enum Base {
         Major(0, 4, 7),
@@ -132,9 +135,11 @@ public class Chord
     }
 
     public enum Modifier {
+        None(0),
         Sixth(9),
         Seven(10),
-        Major(11);
+        Major(11),
+        Nine(2); // Or 13 halftones
 
         private int mod;
         Modifier(int mod){

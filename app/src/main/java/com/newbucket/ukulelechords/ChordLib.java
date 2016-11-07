@@ -15,6 +15,8 @@ public class ChordLib {
         mChords = new HashMap<>();
 
         // Source: http://ukuchords.com/files/ukuchords_complete_ukulele_chords_chart_180.png
+        addChord("C", new Chord(Chord.Base.Major));
+        addChord("C7", new Chord(Chord.Base.Major, Chord.Modifier.Seven));
 //        addChord("C", new Chord(3, 0, 0, 0));
 //        addChord("C7", new Chord(1, 0, 0, 0));
 //        addChord("Cm", new Chord(3, 3, 3, 0));
@@ -223,7 +225,9 @@ public class ChordLib {
     }
 
     public Chord getChord(String key) {
-        return mChords.get(key);
+//        return mChords.get(key);
+        int n = Scale.ParseString(key);
+        return new Chord(Chord.Base.Major, new Note(n));
     }
 
 

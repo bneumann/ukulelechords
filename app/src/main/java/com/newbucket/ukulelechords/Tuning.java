@@ -8,6 +8,10 @@ import java.util.ArrayList;
 
 public class Tuning extends ArrayList<Note>
 {
+    public Tuning() {
+        this(StandardTypes.Concert);
+    }
+
     public Tuning(StandardTypes type) {
         switch (type) {
             case Baritone:

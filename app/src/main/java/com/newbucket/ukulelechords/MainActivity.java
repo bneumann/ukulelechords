@@ -8,11 +8,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.ArrayAdapter;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
@@ -26,16 +21,18 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
 {
-
-    private final String SYMBOL_FLAT = "\u266D";
-    private final String SYMBOL_NATURAL = "\u266E";
-    private final String SYMBOL_SHARP = "\u266F";
+    private enum Symbols {
+        Flat,
+        Natural,
+        Sharp
+    }
 
     public String TAG = "MainActivity";
 
-    protected String mKey = "C";
-    protected String mIntonation = SYMBOL_NATURAL;
-    protected String mHarmony = "";
+    private Note mRootNote = new Note();
+    private Symbols mIntonation = Symbols.Natural;
+    private Chord.Base mHarmony = Chord.Base.Major;
+    private Chord.Modifier mModifier = Chord.Modifier.None;
 
     private ViewGroup mChordMap;
     private ViewGroup mHarmonyMap;
@@ -43,15 +40,14 @@ public class MainActivity extends AppCompatActivity
     private ChordLib mChordlib;
     private Chord mCurrentChord;
 
-    private String[] mChordArray = {"C", "D", "E", "F", "G", "A", "B", SYMBOL_FLAT};
+    private String[] mChordArray = {"C", "D", "E", "F", "G", "A", "B"};
     private String[] mHarmonyArray = {"M", "7", "m", "m7", "dim", "aug", "6", "maj7", "9"};
 
     private boolean mChordsOpen, mKeysOpen;
     private Animation mAnimationOpen, mAnimationClose;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -84,7 +80,7 @@ public class MainActivity extends AppCompatActivity
         mChordsOpen = false;
         mKeysOpen = false;
 
-        mFretView.SetChord(mChordlib.getChord(mKey));
+        mFretView.SetChord(mChordlib.getChord("C"));
         mFretView.setOnLongClickListener(new onFretLongCLickListener());
 
         FloatingActionButton changeAccidental = (FloatingActionButton) findViewById(R.id.change_accidental);
@@ -147,8 +143,7 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    private void drawKeys()
-    {
+    private void drawKeys() {
         ArrayList<View> tList = getAllChildren(mChordMap);
         int counter = 0;
         for (View v : tList)
@@ -160,13 +155,14 @@ public class MainActivity extends AppCompatActivity
             if (counter != tList.size() - 1)
             {
                 // Remove natural sign if intonation is natural because it looks weird.
-                if (mIntonation.equals(SYMBOL_NATURAL))
+                if (mIntonation == Symbols.Natural)
                 {
                     tmpBitmap = textAsBitmap(mChordArray[counter], fab.getHeight() * 0.75f, Color.WHITE);
                 }
                 else
                 {
-                    tmpBitmap = textAsBitmap(mChordArray[counter] + mIntonation, fab.getHeight() * 0.75f, Color.WHITE);
+                    String accidental = mIntonation == Symbols.Flat ? Note.CodeFlat : Note.CodeSharp;
+                    tmpBitmap = textAsBitmap(mChordArray[counter] + accidental, fab.getHeight() * 0.75f, Color.WHITE);
                 }
                 // TODO: Use drawables
                 fab.setImageBitmap(tmpBitmap);
@@ -176,111 +172,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private class onFretLongCLickListener implements View.OnLongClickListener
-    {
-        @Override
-        public boolean onLongClick(View v)
-        {
-            Log.d(TAG, "Long click detected");
-            return true;
-        }
-    }
-
-    private class onChangeAccidental implements View.OnClickListener
-    {
-        private int mIcon;
-
-        @Override
-        public void onClick(View v)
-        {
-            Log.d(TAG, String.format("Switching state to %s", mIntonation));
-            switch(mIntonation)
-            {
-                case SYMBOL_NATURAL:
-                    mIcon = R.drawable.ic_key_up; // < next Icon
-                    mIntonation = SYMBOL_FLAT; // current State
-                    break;
-                case SYMBOL_FLAT:
-                    mIcon = R.drawable.ic_key_reset;
-                    mIntonation = SYMBOL_SHARP;
-                    break;
-                case SYMBOL_SHARP:
-                    mIcon = R.drawable.ic_key_down;
-                    mIntonation = SYMBOL_NATURAL;
-                    break;
-                default:
-                    mIcon = R.drawable.ic_key_down;
-                    mIntonation = SYMBOL_NATURAL;
-                    break;
-            }
-            ((FloatingActionButton)v).setImageResource(mIcon);
-            drawKeys();
-        }
-    }
-
-    private class onKeyClickListener implements View.OnClickListener
-    {
-        @Override
-        public void onClick(View v)
-        {
-            FloatingActionButton fab = (FloatingActionButton) v;
-            String key = (String) v.getTag(R.id.tag_key_chord);
-            String harm = (String) v.getTag(R.id.tag_key_harmony);
-            if (key != null)
-            {
-                if (key.equals(SYMBOL_SHARP) || key.equals(SYMBOL_FLAT) || key.equals(SYMBOL_NATURAL))
-                {
-                    switch (mIntonation)
-                    {
-                        case SYMBOL_NATURAL:
-                            mChordArray[mChordArray.length - 1] = SYMBOL_SHARP;
-                            break;
-                        case SYMBOL_FLAT:
-                            mChordArray[mChordArray.length - 1] = SYMBOL_NATURAL;
-                            break;
-                        case SYMBOL_SHARP:
-                            mChordArray[mChordArray.length - 1] = SYMBOL_FLAT;
-                            break;
-                    }
-                    drawKeys();
-                }
-                else
-                {
-                    mKey = key;
-                    resetBackgroundColor(mChordMap);
-                }
-            }
-            if (harm != null)
-            {
-                // Chordlib has no "M" extension
-                harm = harm.equals("M") ? "" : harm;
-                mHarmony = harm;
-                resetBackgroundColor(mHarmonyMap);
-            }
-            // TODO: This is crappy code. Oh yeah. Rewrite the whole intonation-symbol thingy
-            String intonation = "";
-            switch (mIntonation)
-            {
-                case SYMBOL_NATURAL:
-                    intonation = "";
-                    break;
-                case SYMBOL_FLAT:
-                    intonation = "b";
-                    break;
-                case SYMBOL_SHARP:
-                    intonation = "#";
-                    break;
-            }
-            String nChord = mKey + intonation + mHarmony;
-            Log.d(TAG, nChord);
-            mCurrentChord = mChordlib.getChord(nChord);
-            mFretView.SetChord(mCurrentChord);
-            fab.setBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.colorButtonActive));
-        }
-    }
-
-    private void drawHarmonies()
-    {
+    private void drawHarmonies() {
         ArrayList<View> tList = getAllChildren(mHarmonyMap);
         int counter = 0;
         for (View v : tList)
@@ -295,8 +187,119 @@ public class MainActivity extends AppCompatActivity
             fab.setImageBitmap(textAsBitmap(mHarmonyArray[counter], fab.getHeight() * 0.75f, Color.WHITE));
             fab.setTag(R.id.tag_key_harmony, mHarmonyArray[counter++]);
 
-            fab.setOnClickListener(new onKeyClickListener());
+            fab.setOnClickListener(new onHarmonyClickListener());
         }
+    }
+
+    private class onFretLongCLickListener implements View.OnLongClickListener {
+        @Override
+        public boolean onLongClick(View v)
+        {
+            Log.d(TAG, "Long click detected");
+            return true;
+        }
+    }
+
+    private class onChangeAccidental implements View.OnClickListener {
+        private int mIcon;
+
+        @Override
+        public void onClick(View v) {
+            Log.d(TAG, String.format("Switching state to %s", mIntonation));
+            switch(mIntonation)
+            {
+                case Natural:
+                    mIcon = R.drawable.ic_key_up; // < next Icon
+                    mIntonation = Symbols.Flat; // current State
+                    break;
+                case Flat:
+                    mIcon = R.drawable.ic_key_reset;
+                    mIntonation = Symbols.Sharp;
+                    break;
+                case Sharp:
+                    mIcon = R.drawable.ic_key_down;
+                    mIntonation = Symbols.Natural;
+                    break;
+                default:
+                    mIcon = R.drawable.ic_key_down;
+                    mIntonation = Symbols.Natural;
+                    break;
+            }
+            ((FloatingActionButton)v).setImageResource(mIcon);
+            drawKeys();
+            updateChord();
+        }
+    }
+
+    private class onHarmonyClickListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v)
+        {
+            String harm = (String) v.getTag(R.id.tag_key_harmony);
+            // Chordlib has no "M" extension
+            mModifier = Chord.Modifier.None;
+            switch(harm) {
+                case "7":
+                    mHarmony = Chord.Base.Major;
+                    mModifier = Chord.Modifier.Seven;
+                    break;
+                case "m":
+                    mHarmony = Chord.Base.Minor;
+                    break;
+                case "m7":
+                    mHarmony = Chord.Base.Minor;
+                    mModifier = Chord.Modifier.Seven;
+                    break;
+                case "dim":
+                    mHarmony = Chord.Base.Dim;
+                    break;
+                case "aug":
+                    mHarmony = Chord.Base.Aug;
+                    break;
+                case "6":
+                    mHarmony = Chord.Base.Major;
+                    mModifier = Chord.Modifier.Sixth;
+                    break;
+                case "maj7":
+                    mHarmony = Chord.Base.Major;
+                    mModifier = Chord.Modifier.Major;
+                    break;
+                case "9":
+                    mHarmony = Chord.Base.Major;
+                    mModifier = Chord.Modifier.Nine;
+                    break;
+                case "M":
+                default:
+                    mHarmony = Chord.Base.Major;
+            }
+            resetBackgroundColor(mHarmonyMap);
+            v.setBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.colorButtonActive));
+            updateChord();
+        }
+    }
+
+    private class onKeyClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v)
+        {
+            FloatingActionButton fab = (FloatingActionButton) v;
+            mRootNote = new Note((String) v.getTag(R.id.tag_key_chord));
+            resetBackgroundColor(mChordMap);
+            fab.setBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.colorButtonActive));
+            updateChord();
+        }
+    }
+
+    public void updateChord() {
+        if(mModifier == Chord.Modifier.None) {
+            mCurrentChord = new Chord(mHarmony, mRootNote);
+        }else {
+            mCurrentChord = new Chord(mHarmony, mRootNote, mModifier);
+        }
+        Log.d(TAG, "Current Chord: " + mCurrentChord.toString());
+//        mCurrentChord = mChordlib.getChord(nChord);
+        mFretView.SetChord(mCurrentChord);
     }
 
     public static Bitmap textAsBitmap(String text, float textSize, int textColor) {

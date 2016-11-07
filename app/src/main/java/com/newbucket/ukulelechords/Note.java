@@ -6,6 +6,10 @@ import java.util.Arrays;
  * Created by benni on 16.10.2015.
  */
 public class Note {
+
+    public static final String CodeFlat = "\u266D";
+    public static final String CodeSharp = "\u266F";
+
     private int mNote = 0;
 
     public Note()
