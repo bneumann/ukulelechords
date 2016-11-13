@@ -1,5 +1,4 @@
 package com.newbucket.ukulelechords;
-
 import android.test.AndroidTestCase;
 
 /**
@@ -106,12 +105,33 @@ public class ApplicationTest extends AndroidTestCase{
         assertEquals("E fret is 3", 3, cf.GetFretValues()[2]);
         assertEquals("A fret is 2", 2, cf.GetFretValues()[3]);
     }
-//
-//    public void testReturnNoteString()
-//    {
-//        Note n  = new Note("G", "C");
-//        assertEquals("G", n.toString());
-//    }
+
+    public void testCheckAllChords()
+    {
+        ChordTestLib cl = new ChordTestLib();
+        Tuning t = new Tuning(Tuning.StandardTypes.Concert);
+
+        for(String chordname : cl.getChordNames()) {
+            Chord c = new Chord(chordname);
+            ChordFinder cf = new ChordFinder(t, c);
+            cf.UpdateFretValues();
+            int[] testFrets = cl.get(chordname);
+            int[] calcFrets = cf.GetFretValues();
+            assertArrayEquals(testFrets, calcFrets);
+        }
+    }
+
+    private void assertArrayEquals(int[] testin1, int[] testin2)
+    {
+        if(testin1.length != testin2.length) {
+            failNotSame("Array size don't match!", testin1.length, testin2.length);
+        }
+        for(int i = 0; i < testin1.length; i++) {
+            if(testin1[i] != testin2[i]) {
+                failNotEquals(String.format("Array entry %d does not match!", i), testin1[i], testin2[i]);
+            }
+        }
+    }
 //
 //    public void testNextInScale()
 //    {

@@ -317,6 +317,7 @@ public class MainActivity extends AppCompatActivity
         return image;
     }
 
+
     private void resetBackgroundColor(ViewGroup buttonGroup)
     {
         ArrayList<View> tList = getAllChildren(buttonGroup);

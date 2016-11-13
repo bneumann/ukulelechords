@@ -1,7 +1,11 @@
 package com.newbucket.ukulelechords;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by benni on 16.10.2015.
@@ -9,6 +13,7 @@ import java.util.Arrays;
 public class Chord extends ArrayList<Note>
 {
 //    private ArrayList<Note> mNotes = new ArrayList<>();
+
 
     public Chord(Base chord)
     {
@@ -34,6 +39,46 @@ public class Chord extends ArrayList<Note>
     {
         this(chord, mod);
         transpose(rootNote);
+    }
+
+    /**
+     * Get a chord by it's name.
+     * @param name Name of t he Chord such as "C", Bb" or "Bbmaj7"
+     */
+    public Chord(String name) {
+        this(Base.Major);
+
+        final String regex = "([A-G][b#]?)([a-zA-Z2-9]+)";
+        final Pattern pattern = Pattern.compile(regex);
+        final Matcher matcher = pattern.matcher(name);
+
+        int transp = 0;
+
+        while (matcher.find()) {
+            for (int i = 1; i <= matcher.groupCount(); i++) {
+                if( i == 1 ) {
+                    transp = Scale.ParseString(matcher.group(i));
+                    this.transpose(transp);
+                }
+                if( i == 2 )
+                {
+                    switch(matcher.group(i)) {
+                        case "7":
+                            add(new Note(Modifier.Seven.mod).transpose(transp));
+                            break;
+                        case "m":
+                            // FIXME: Initialize chords later
+                            removeAll(this);
+                            add(new Note(Base.Minor.first));
+                            add(new Note(Base.Minor.second));
+                            add(new Note(Base.Minor.third));
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
     }
 
     public Chord transpose(Note rootNote)
