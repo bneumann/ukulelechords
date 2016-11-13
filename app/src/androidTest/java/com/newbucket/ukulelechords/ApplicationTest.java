@@ -1,6 +1,8 @@
 package com.newbucket.ukulelechords;
 import android.test.AndroidTestCase;
 
+import java.util.Arrays;
+
 /**
  * <a href="http://d.android.com/tools/testing/testing_android.html">Testing Fundamentals</a>
  */
@@ -126,28 +128,16 @@ public class ApplicationTest extends AndroidTestCase{
         if(testin1.length != testin2.length) {
             failNotSame("Array size don't match!", testin1.length, testin2.length);
         }
+        boolean fail = false;
         for(int i = 0; i < testin1.length; i++) {
             if(testin1[i] != testin2[i]) {
-                failNotEquals(String.format("Array entry %d does not match!", i), testin1[i], testin2[i]);
+                fail = true;
+                break;
             }
         }
+        if(fail) {
+            failNotEquals("Arrays don't match!", Arrays.toString(testin1), Arrays.toString(testin2));
+        }
     }
-//
-//    public void testNextInScale()
-//    {
-//        System.out.println("Testing the next in scale function");
-//        Note tmp = new Note();
-//        String res = tmp.getNextInScale("C");
-//        assertEquals("Checking for sharp flat", "C#", res);
-//
-//        res = tmp.getNextInScale("C#");
-//        assertEquals("D", res);
-//
-//        res = tmp.getNextInScale("Db");
-//        assertEquals("Checking for flat scale", "D", res);
-//
-//        res = tmp.getNextInScale("B");
-//        assertEquals("Checking for overflow", "C", res);
-//    }
 }
 

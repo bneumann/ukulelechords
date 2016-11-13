@@ -1,9 +1,9 @@
 package com.newbucket.ukulelechords;
 
-import android.util.Log;
-
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -12,8 +12,6 @@ import java.util.regex.Pattern;
  */
 public class Chord extends ArrayList<Note>
 {
-//    private ArrayList<Note> mNotes = new ArrayList<>();
-
 
     public Chord(Base chord)
     {
@@ -46,39 +44,7 @@ public class Chord extends ArrayList<Note>
      * @param name Name of t he Chord such as "C", Bb" or "Bbmaj7"
      */
     public Chord(String name) {
-        this(Base.Major);
-
-        final String regex = "([A-G][b#]?)([a-zA-Z2-9]+)";
-        final Pattern pattern = Pattern.compile(regex);
-        final Matcher matcher = pattern.matcher(name);
-
-        int transp = 0;
-
-        while (matcher.find()) {
-            for (int i = 1; i <= matcher.groupCount(); i++) {
-                if( i == 1 ) {
-                    transp = Scale.ParseString(matcher.group(i));
-                    this.transpose(transp);
-                }
-                if( i == 2 )
-                {
-                    switch(matcher.group(i)) {
-                        case "7":
-                            add(new Note(Modifier.Seven.mod).transpose(transp));
-                            break;
-                        case "m":
-                            // FIXME: Initialize chords later
-                            removeAll(this);
-                            add(new Note(Base.Minor.first));
-                            add(new Note(Base.Minor.second));
-                            add(new Note(Base.Minor.third));
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            }
-        }
+        this.addAll(getChordParts(name).GetNotes());
     }
 
     public Chord transpose(Note rootNote)
@@ -171,11 +137,28 @@ public class Chord extends ArrayList<Note>
         Aug(0, 4, 8);
 
         private int first, second, third;
+        private static Map<String, Base> mLookup;
+        static {
+            Map<String, Base> aMap = new HashMap<>();
+            aMap.put("M", Major);
+            aMap.put("m", Minor);
+            aMap.put("sus4", Sus4);
+            aMap.put("sus2", Sus2);
+            aMap.put("dim", Dim);
+            aMap.put("aug", Aug);
+            mLookup = Collections.unmodifiableMap(aMap);
+        }
+
         Base(int first, int second, int third)
         {
             this.first = first;
             this.second = second;
             this.third = third;
+        }
+
+        public static Base ParseString(String name) {
+            Base ret = mLookup.get(name);
+            return ret == null ? Base.Major : ret;
         }
     }
 
@@ -186,9 +169,46 @@ public class Chord extends ArrayList<Note>
         Major(11),
         Nine(2); // Or 13 halftones
 
+
+        private static Map<String, Modifier> mLookup;
+        static {
+            Map<String, Modifier> aMap = new HashMap<>();
+            aMap.put("", None);
+            aMap.put("6", Sixth);
+            aMap.put("7", Seven);
+            aMap.put("maj7", Major);
+            aMap.put("9", Nine);
+            mLookup = Collections.unmodifiableMap(aMap);
+        }
+
         private int mod;
         Modifier(int mod){
             this.mod = mod;
         }
+
+        public static Modifier ParseString(String name) {
+            Modifier ret = mLookup.get(name);
+            return ret == null ? Modifier.None : ret;
+        }
+    }
+
+    private Chord getChordParts(String chordname) {
+        final String regex = "([A-G][b#]?)([m|sus[24]|aug|dim]*)([\\d|maj]?)";
+        final Pattern pattern = Pattern.compile(regex);
+        final Matcher matcher = pattern.matcher(chordname);
+
+        Note tNote = null;
+        Base tChord = null;
+        Modifier tMod = null;
+
+        if (matcher.matches()) {
+            tNote = new Note(Scale.ParseString(matcher.group(1)));
+            tChord = Base.ParseString(matcher.group(2));
+            tMod = Modifier.ParseString(matcher.group(3));
+        } else {
+            throw new NullPointerException("Chord has not been found or could not be retrieved from the given string");
+        }
+
+        return new Chord(tChord, tNote, tMod);
     }
 }
