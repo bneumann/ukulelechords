@@ -1,4 +1,4 @@
-package com.newbucket.ukulelechords;
+package com.newbucket.musiclib;
 
 import java.util.ArrayList;
 

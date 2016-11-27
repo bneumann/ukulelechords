@@ -1,5 +1,7 @@
 package com.newbucket.ukulelechords;
 
+import android.app.Activity;
+import android.app.Fragment;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -7,8 +9,9 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,11 +19,18 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
+import android.widget.ListView;
+
+import com.newbucket.musiclib.Chord;
+import com.newbucket.musiclib.ChordLib;
+import com.newbucket.musiclib.Note;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends Activity implements ChordSelectorFragment.OnChordSelectListener
 {
+
     private enum Symbols {
         Flat,
         Natural,
@@ -39,6 +49,7 @@ public class MainActivity extends AppCompatActivity
     private UkeFretView mFretView;
     private ChordLib mChordlib;
     private Chord mCurrentChord;
+    private Fragment mContentFragment;
 
     private String[] mChordArray = {"C", "D", "E", "F", "G", "A", "B"};
     private String[] mHarmonyArray = {"M", "7", "m", "m7", "dim", "aug", "6", "maj7", "9"};
@@ -46,101 +57,120 @@ public class MainActivity extends AppCompatActivity
     private boolean mChordsOpen, mKeysOpen;
     private Animation mAnimationOpen, mAnimationClose;
 
+    private final boolean mOldDesign = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        // FIXME: Implement accoring to https://developer.android.com/training/implementing-navigation/nav-drawer.html
-//        String[] mPlanetTitles = new String[]{"Test", "Bla"};
-//        DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-//        ListView mDrawerList = (ListView) findViewById(R.id.left_drawer);
-//
-//        // Set the adapter for the list view
-//        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-//                android.R.layout.simple_list_item_1, mPlanetTitles));
-//        // Set the list's click listener
-//        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener()
-//        {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-//            {
-//
-//            }
-//        });
+        setContentView(R.layout.chordlib_activity);
 
-        mChordMap = (ViewGroup) findViewById(R.id.chord_map);
-        mHarmonyMap = (ViewGroup) findViewById(R.id.harm_map);
-        mFretView = (UkeFretView) findViewById(R.id.fret_view);
-        mChordlib = new ChordLib();
-
-        mAnimationOpen = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
-        mAnimationClose = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
-
-        mChordsOpen = false;
-        mKeysOpen = false;
-
-        mFretView.SetChord(mChordlib.getChord("C"));
-        mFretView.setOnLongClickListener(new onFretLongCLickListener());
-
-        FloatingActionButton changeAccidental = (FloatingActionButton) findViewById(R.id.change_accidental);
-        changeAccidental.setOnClickListener(new onChangeAccidental());
-
-        // The tree observer throws this event when the layout has been measured.
-        ViewTreeObserver vto = mChordMap.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener()
+        //region Code for old design
+        if (mOldDesign)
         {
-            @Override
-            public void onGlobalLayout()
-            {
-                // draw keys on hidden chord map layout
-                drawKeys();
-                // draw harmonies on hidden harmony layout
-                drawHarmonies();
-            }
-        });
+            setContentView(R.layout.activity_main);
+            // FIXME: Implement accoring to https://developer.android.com/training/implementing-navigation/nav-drawer.html
+            DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+            ListView mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
-        FloatingActionButton vAddHarmonies = (FloatingActionButton) findViewById(R.id.addharms);
-        vAddHarmonies.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
+            // Set the adapter for the list view
+            mDrawerList.setAdapter(new MenuDrawerAdapter(this,
+                    R.layout.menu_list_view, getResources().getStringArray(R.array.slide_menu)));
+            mDrawerList.setSelection(1);
+            // Set the list's click listener
+            mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener()
             {
-                if(mKeysOpen) {
-                    hide(mHarmonyMap);
-                    mKeysOpen = !mKeysOpen;
-                }
-                if(!mChordsOpen) {
-                    reveal(mChordMap);
-                }
-                else
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id)
                 {
-                    hide(mChordMap);
-                }
-                mChordsOpen = !mChordsOpen;
-            }
-        });
 
-        FloatingActionButton vAddChords = (FloatingActionButton) findViewById(R.id.addchords);
-        vAddChords.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
+                }
+            });
+
+            mDrawerLayout.openDrawer(Gravity.LEFT);
+
+            mChordMap = (ViewGroup) findViewById(R.id.chord_map);
+            mHarmonyMap = (ViewGroup) findViewById(R.id.harm_map);
+            mFretView = (UkeFretView) findViewById(R.id.fret_view);
+
+
+            mChordlib = new ChordLib();
+
+            mAnimationOpen = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
+            mAnimationClose = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
+
+            mChordsOpen = false;
+            mKeysOpen = false;
+
+            mFretView.setChord(mChordlib.getChord("C"));
+            mFretView.setOnLongClickListener(new onFretLongCLickListener());
+
+            FloatingActionButton changeAccidental = (FloatingActionButton) findViewById(R.id.change_accidental);
+            changeAccidental.setOnClickListener(new onChangeAccidental());
+
+            // The tree observer throws this event when the layout has been measured.
+            ViewTreeObserver vto = mChordMap.getViewTreeObserver();
+            vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener()
             {
-                if(mChordsOpen) {
-                    hide(mChordMap);
+                @Override
+                public void onGlobalLayout()
+                {
+                    // draw keys on hidden chord map layout
+                    drawKeys();
+                    // draw harmonies on hidden harmony layout
+                    drawHarmonies();
+                }
+            });
+
+            FloatingActionButton vAddHarmonies = (FloatingActionButton) findViewById(R.id.addharms);
+            vAddHarmonies.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    if (mKeysOpen)
+                    {
+                        hide(mHarmonyMap);
+                        mKeysOpen = !mKeysOpen;
+                    }
+                    if (!mChordsOpen)
+                    {
+                        reveal(mChordMap);
+                    }
+                    else
+                    {
+                        hide(mChordMap);
+                    }
                     mChordsOpen = !mChordsOpen;
                 }
-                if(!mKeysOpen) {
-                    reveal(mHarmonyMap);
-                }
-                else
+            });
+
+            FloatingActionButton vAddChords = (FloatingActionButton) findViewById(R.id.addchords);
+            vAddChords.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
                 {
-                    hide(mHarmonyMap);
+                    if (mChordsOpen)
+                    {
+                        hide(mChordMap);
+                        mChordsOpen = !mChordsOpen;
+                    }
+                    if (!mKeysOpen)
+                    {
+                        reveal(mHarmonyMap);
+                    }
+                    else
+                    {
+                        hide(mHarmonyMap);
+                    }
+                    mKeysOpen = !mKeysOpen;
                 }
-                mKeysOpen = !mKeysOpen;
-            }
-        });
+            });
+
+        }
+        //endregion
+
     }
 
     private void drawKeys() {
@@ -299,7 +329,7 @@ public class MainActivity extends AppCompatActivity
         }
         Log.d(TAG, "Current Chord: " + mCurrentChord.toString());
 //        mCurrentChord = mChordlib.getChord(nChord);
-        mFretView.SetChord(mCurrentChord);
+        mFretView.setChord(mCurrentChord);
     }
 
     public static Bitmap textAsBitmap(String text, float textSize, int textColor) {
@@ -345,6 +375,10 @@ public class MainActivity extends AppCompatActivity
         return reply;
     }
 
+    /**
+     * Reveals a complete ViewGroup
+     * @param targetView ViewGroup to be set to visible
+     */
     private void reveal(ViewGroup targetView)
     {
         ArrayList<View> tList = getAllChildren(targetView);
@@ -400,5 +434,47 @@ public class MainActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void updateFretFragment()
+    {
+        Log.d(TAG, mCurrentChord.toString());
+        FretFragment fretFrag = (FretFragment)getFragmentManager().findFragmentById(R.id.fret_fragment);
+        if(fretFrag != null)
+        {
+            fretFrag.setChord(mCurrentChord);
+        }
+        else
+        {
+            // If we are on a different pane it might occur that we want to load the fret fragment here.
+        }
+    }
+
+    @Override
+    public void onChordSelected(Chord chord)
+    {
+        mCurrentChord = chord;
+        Log.d(TAG, chord.toString());
+        updateFretFragment();
+    }
+
+    @Override
+    public void onUpPressed()
+    {
+        if(mCurrentChord != null)
+        {
+            mCurrentChord.transpose(1);
+            updateFretFragment();
+        }
+    }
+
+    @Override
+    public void onDownPressed()
+    {
+        if(mCurrentChord != null)
+        {
+            mCurrentChord.transpose(-1);
+            updateFretFragment();
+        }
     }
 }

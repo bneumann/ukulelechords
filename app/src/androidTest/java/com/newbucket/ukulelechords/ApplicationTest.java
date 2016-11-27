@@ -1,6 +1,11 @@
 package com.newbucket.ukulelechords;
 import android.test.AndroidTestCase;
 
+import com.newbucket.musiclib.Chord;
+import com.newbucket.musiclib.ChordFinder;
+import com.newbucket.musiclib.Note;
+import com.newbucket.musiclib.Tuning;
+
 import java.util.Arrays;
 
 /**

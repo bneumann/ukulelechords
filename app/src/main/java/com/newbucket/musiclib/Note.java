@@ -1,6 +1,4 @@
-package com.newbucket.ukulelechords;
-
-import java.util.Arrays;
+package com.newbucket.musiclib;
 
 /**
  * Created by benni on 16.10.2015.

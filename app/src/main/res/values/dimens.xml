@@ -1,6 +1,39 @@
 <resources>
+    <!-- Inspired by https://github.com/google/iosched 22.11.2016 -->
+
+    <!-- standard metrics -->
+    <dimen name="spacing_normal">8dp</dimen>
+    <dimen name="spacing_micro">4dp</dimen>
+    <dimen name="padding_normal">16dp</dimen>
+    <dimen name="spacing_large">32dp</dimen>
+    <dimen name="touch_raise">6dp</dimen>
+    <dimen name="button_bar_elevation">6dp</dimen>
+
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="menu_text_size">16dp</dimen>
+    <dimen name="menu_text_padding">8dp</dimen>
+
+    <!-- per https://developer.android.com/reference/android/view/ViewGroup.LayoutParams.html#MATCH_PARENT -->
+    <item name="match_parent" format="integer" type="dimen">-1</item>
+
+    <!-- Welcome Activity -->
+    <dimen name="welcome_logo_top_spacing">48dp</dimen>
+    <dimen name="welcome_logo_height">112dp</dimen>
+    <dimen name="welcome_content_padding_top">200dp</dimen> <!-- welcome_logo_top_spacing + welcome_logo_height + 40dp (logo bottom spacing) -->
+    <dimen name="welcome_content_padding">@dimen/padding_normal</dimen>
+    <dimen name="welcome_content_width">@dimen/match_parent</dimen>
+    <dimen name="welcome_title_size">20sp</dimen>
+
+    <!-- Chord Select-->
+    <dimen name="chord_select_text_size">25dp</dimen>
+    <dimen name="chord_grid_element">80dp</dimen>
+    <dimen name="chord_element_margin">8dp</dimen>
+
+    <!-- Cards -->
+    <dimen name="card_elevation">2dp</dimen>
+    <dimen name="card_corner_radius">2dp</dimen>
+
 </resources>

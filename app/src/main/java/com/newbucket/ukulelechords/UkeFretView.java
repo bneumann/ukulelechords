@@ -3,12 +3,14 @@ package com.newbucket.ukulelechords;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.DrawFilter;
 import android.graphics.Paint;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
+
+import com.newbucket.musiclib.Chord;
+import com.newbucket.musiclib.ChordFinder;
+import com.newbucket.musiclib.Tuning;
 
 /**
  * Created by benni on 15.10.2015.
@@ -22,8 +24,13 @@ public class UkeFretView extends ImageView{
 
     private Chord mChord;
 
+    private final float shadowRadius = 4.0f;
+    private final float shadowDx = 0.0f;
+    private final float shadowDy = 2.0f;
+    private final int shadowColor = Color.BLACK;
     private final int NUM_FRETS = 5;
     private final int NUM_STRINGS = 4;
+    private final float mFretWidthRatio = 3f / 3.5f; // Measured from Ukulele
 
     public UkeFretView(Context context) {
         super(context);
@@ -40,22 +47,70 @@ public class UkeFretView extends ImageView{
         init();
     }
 
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
+    {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+        int parentWidth = MeasureSpec.getSize(widthMeasureSpec);
+        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+        int parentHeight = MeasureSpec.getSize(heightMeasureSpec);
+
+        int desiredWidth = 300;
+        int desiredHeight = 200;
+
+        int width;
+        int height;
+
+        //Measure Width
+        if (widthMode == MeasureSpec.EXACTLY) {
+            //Must be this size
+            width = parentWidth;
+        } else if (widthMode == MeasureSpec.AT_MOST) {
+            //Can't be bigger than...
+            width = Math.min(desiredWidth, parentWidth);
+        } else {
+            //Be whatever you want
+            width = desiredWidth;
+        }
+
+        //Measure Height
+        if (heightMode == MeasureSpec.EXACTLY) {
+            //Must be this size
+            height = parentHeight;
+        } else if (heightMode == MeasureSpec.AT_MOST) {
+            //Can't be bigger than...
+            height = (int)((float)parentWidth * mFretWidthRatio);
+            height = parentHeight;
+        } else {
+            //Be whatever you want
+            height = desiredHeight;
+        }
+
+        setMeasuredDimension(width, height);
+    }
+
     private void init()
     {
+        int cMain = ContextCompat.getColor(getContext(), R.color.colorPrimary);
+
         mThickStroke = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mThickStroke.setColor(Color.BLACK);
+        mThickStroke.setColor(cMain);
         mThickStroke.setStrokeWidth(30f);
 
         mThinStroke = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mThinStroke.setColor(Color.BLACK);
+        mThinStroke.setColor(cMain);
         mThinStroke.setStrokeWidth(4f);
 
         mNotePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mNotePaint.setColor(Color.BLACK);
         mNotePaint.setStrokeWidth(1f);
+        this.setLayerType(LAYER_TYPE_SOFTWARE, mNotePaint);
+        mNotePaint.setShadowLayer(shadowRadius, shadowDx, shadowDy, shadowColor);
     }
 
-    public void SetChord(Chord chord)
+    public void setChord(Chord chord)
     {
         mChord = chord;
         this.invalidate();

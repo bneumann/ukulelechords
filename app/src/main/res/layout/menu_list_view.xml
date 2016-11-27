@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+                 android:layout_width="fill_parent"
+                 android:layout_height="wrap_content"
+                 android:background="@color/colorButtonActive">
+
+    <LinearLayout android:id="@+id/Text"
+                  android:orientation="vertical"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:padding="@dimen/menu_text_padding"
+                  >
+        <TextView
+            android:id="@+id/MenuText1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/textActive"
+            android:textSize="@dimen/menu_text_size"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-black"
+            android:paddingLeft="@dimen/menu_text_padding"
+            />
+        <TextView
+            android:id="@+id/MenuText2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-black"
+            android:textColor="@color/textInactive"
+            />
+    </LinearLayout>
+</RelativeLayout>

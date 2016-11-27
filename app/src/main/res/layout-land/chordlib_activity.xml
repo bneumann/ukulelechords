@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+
+        <fragment android:name="com.newbucket.ukulelechords.FretFragment"
+                  android:id="@+id/fret_fragment"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:layout_weight="1"
+                  tools:layout="@layout/fretview_fragment"/>
+        <View
+            android:background="?colorPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"/>
+    </LinearLayout>
+    <fragment android:name="com.newbucket.ukulelechords.ChordSelectorFragment"
+              android:id="@+id/chord_select_fragment"
+              android:layout_weight="1"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              tools:layout="@layout/chordselector_fragment"/>
+</LinearLayout>

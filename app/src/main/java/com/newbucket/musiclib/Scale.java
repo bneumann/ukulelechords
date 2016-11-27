@@ -1,4 +1,4 @@
-package com.newbucket.ukulelechords;
+package com.newbucket.musiclib;
 
 /**
  * Created by benni on 06.11.2016.

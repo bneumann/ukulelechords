@@ -1,6 +1,4 @@
-package com.newbucket.ukulelechords;
-
-import android.util.Log;
+package com.newbucket.musiclib;
 
 import java.util.HashMap;
 

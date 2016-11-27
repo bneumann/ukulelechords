@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"  >
+
+    <LinearLayout
+        android:id="@+id/chord_map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="C"
+                style="@style/ChordSelector"
+                android:elevation="2dp"
+                />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="F"
+                style="@style/ChordSelector"
+                android:elevation="2dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="D"
+                style="@style/ChordSelector"
+                android:elevation="2dp"
+                />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="G"
+                style="@style/ChordSelector"
+                android:elevation="2dp"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="B"
+                style="@style/ChordSelector"
+                android:elevation="2dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="E"
+                style="@style/ChordSelector"
+                android:elevation="2dp"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="A"
+                style="@style/ChordSelector"
+                android:elevation="2dp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/selector_button_bar"
+        android:layout_width="@dimen/match_parent"
+        android:layout_height="?actionBarSize"
+        android:layout_gravity="bottom"
+        android:background="?colorPrimary"
+        android:elevation="@dimen/button_bar_elevation">
+
+        <Button
+            android:id="@+id/button_accept"
+            style="?android:borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/select_harm"
+            android:textAppearance="@style/TextAppearance.AppCompat.Button"
+            android:textAlignment="viewStart"
+            android:layout_marginLeft="@dimen/padding_normal"
+            android:textColor="@color/textActive"/>
+
+        <Button
+            android:id="@+id/button_up"
+            style="?android:borderlessButtonStyle"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:drawableRight="@drawable/ic_key_up"
+            android:textAppearance="@style/TextAppearance.AppCompat.Button"
+            android:textColor="@color/textActive"/>
+
+        <Button
+            android:id="@+id/button_down"
+            style="?android:borderlessButtonStyle"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:drawableRight="@drawable/ic_key_down"
+            android:textAppearance="@style/TextAppearance.AppCompat.Button"
+            android:textColor="@color/textActive"/>
+
+        <Button
+            android:id="@+id/button_decline"
+            style="?android:borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/select_chord"
+            android:textAlignment="viewEnd"
+            android:layout_marginRight="@dimen/padding_normal"
+            android:textAppearance="@style/TextAppearance.AppCompat.Button"
+            android:textColor="@color/textActive"/>
+
+    </LinearLayout>
+</LinearLayout>
