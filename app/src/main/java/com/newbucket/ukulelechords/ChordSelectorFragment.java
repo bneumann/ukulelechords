@@ -86,8 +86,7 @@ public class ChordSelectorFragment extends Fragment
             if(b.equals(mButtonUp))
             {
                 mSelectListeners.onUpPressed();
-            }
-            if(b.equals(mButtonUp))
+            }else if(b.equals(mButtonDown))
             {
                 mSelectListeners.onDownPressed();
             }
