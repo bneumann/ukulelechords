@@ -7,4 +7,5 @@
     <color name="app_white">#ffffff</color>
     <color name="textActive">#ffffff</color>
     <color name="textInactive">#9e9e9e</color>
+    <color name="text_chord">#9e9e9e</color>
 </resources>

@@ -8,7 +8,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by benni on 16.10.2015.
+ * @author Benjamin Giesinger
+ * @brief This class hold single
  */
 public class Chord extends ArrayList<Note>
 {
@@ -141,7 +142,9 @@ public class Chord extends ArrayList<Note>
         static {
             Map<String, Base> aMap = new HashMap<>();
             aMap.put("M", Major);
+            aMap.put("major", Major);
             aMap.put("m", Minor);
+            aMap.put("minor", Minor);
             aMap.put("sus4", Sus4);
             aMap.put("sus2", Sus2);
             aMap.put("dim", Dim);
@@ -157,6 +160,7 @@ public class Chord extends ArrayList<Note>
         }
 
         public static Base ParseString(String name) {
+            name = name.toLowerCase();
             Base ret = mLookup.get(name);
             return ret == null ? Base.Major : ret;
         }
@@ -174,10 +178,15 @@ public class Chord extends ArrayList<Note>
         static {
             Map<String, Modifier> aMap = new HashMap<>();
             aMap.put("", None);
+            aMap.put("Major", None);
             aMap.put("6", Sixth);
+            aMap.put("6th", Sixth);
             aMap.put("7", Seven);
+            aMap.put("7th", Seven);
             aMap.put("maj7", Major);
+            aMap.put("Major7", Major);
             aMap.put("9", Nine);
+            aMap.put("9th", Nine);
             mLookup = Collections.unmodifiableMap(aMap);
         }
 
@@ -187,6 +196,7 @@ public class Chord extends ArrayList<Note>
         }
 
         public static Modifier ParseString(String name) {
+            name = name.replaceAll("\\s+", "");
             Modifier ret = mLookup.get(name);
             return ret == null ? Modifier.None : ret;
         }

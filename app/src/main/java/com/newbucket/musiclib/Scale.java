@@ -36,10 +36,22 @@ public class Scale
         return res;
     }
 
-    public static String ParseInteger(int value)  {
+    public static String ParseInteger(int value, boolean flat)
+    {
         if(value < Scale.Min || value > Scale.Max) {
             throw new IllegalArgumentException(value + " out of bounds of scale. Which is between " + Scale.Min + " and " + Scale.Max);
         }
-        return maScale[0][value];
+
+        String res;
+        if (flat)
+        {
+            res = maScale[1][value];
+        }
+        else
+        {
+            res = maScale[0][value];
+        }
+
+        return res;
     }
 }

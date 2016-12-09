@@ -20,6 +20,11 @@ public class ChordFinder
     private Matrix mNoteWeightMatrix, mNoteValueMatrix;
     private static String TAG = "ChordFinder";
 
+    public ChordFinder()
+    {
+        this(new Tuning(), new Chord(Chord.Base.Major));
+    }
+
     public ChordFinder(Tuning tuning, Chord chord) {
         mTuning = tuning;
         mChord = chord;
@@ -28,6 +33,12 @@ public class ChordFinder
         mNoteValues = new int[mTuning.size()];
         Arrays.fill(mFretValues, 0);
 
+        UpdateFretValues();
+    }
+
+    public void FindNewChord(Chord chord)
+    {
+        mChord = chord;
         UpdateFretValues();
     }
 

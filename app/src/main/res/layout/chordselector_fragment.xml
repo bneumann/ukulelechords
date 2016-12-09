@@ -5,87 +5,19 @@
               android:layout_height="match_parent"
               android:orientation="vertical"  >
 
-    <LinearLayout
-        android:id="@+id/chord_map"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="1">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="C"
-                style="@style/ChordSelector"
-                android:elevation="2dp"
-                />
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="F"
-                style="@style/ChordSelector"
-                android:elevation="2dp"/>
+        <include layout="@layout/chord_keys_layout"/>
 
-        </LinearLayout>
+        <include layout="@layout/chord_harm_layout"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="D"
-                style="@style/ChordSelector"
-                android:elevation="2dp"
-                />
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="G"
-                style="@style/ChordSelector"
-                android:elevation="2dp"/>
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="B"
-                style="@style/ChordSelector"
-                android:elevation="2dp"/>
+        <include layout="@layout/chord_selection_layout"/>
+    </RelativeLayout>
 
-        </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="E"
-                style="@style/ChordSelector"
-                android:elevation="2dp"/>
-
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="A"
-                style="@style/ChordSelector"
-                android:elevation="2dp"/>
-        </LinearLayout>
-    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/selector_button_bar"
@@ -96,7 +28,7 @@
         android:elevation="@dimen/button_bar_elevation">
 
         <Button
-            android:id="@+id/button_accept"
+            android:id="@+id/button_harm"
             style="?android:borderlessButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -126,7 +58,7 @@
             android:textColor="@color/textActive"/>
 
         <Button
-            android:id="@+id/button_decline"
+            android:id="@+id/button_chord"
             style="?android:borderlessButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"

@@ -13,7 +13,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="menu_text_size">16dp</dimen>
+    <dimen name="menu_text_size">16sp</dimen>
     <dimen name="menu_text_padding">8dp</dimen>
 
     <!-- per https://developer.android.com/reference/android/view/ViewGroup.LayoutParams.html#MATCH_PARENT -->
@@ -28,7 +28,8 @@
     <dimen name="welcome_title_size">20sp</dimen>
 
     <!-- Chord Select-->
-    <dimen name="chord_select_text_size">25dp</dimen>
+    <dimen name="chord_select_text_size">25sp</dimen>
+    <dimen name="chord_selected_text_size">80sp</dimen>
     <dimen name="chord_grid_element">80dp</dimen>
     <dimen name="chord_element_margin">8dp</dimen>
 

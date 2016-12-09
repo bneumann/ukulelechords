@@ -1,25 +1,27 @@
-package com.newbucket.ukulelechords;
-import android.test.AndroidTestCase;
+package com.newbucket.libs;
+
+import android.support.test.filters.MediumTest;
+import android.support.test.runner.AndroidJUnit4;
 
 import com.newbucket.musiclib.Chord;
 import com.newbucket.musiclib.ChordFinder;
 import com.newbucket.musiclib.Note;
 import com.newbucket.musiclib.Tuning;
 
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import java.util.Arrays;
 
-/**
- * <a href="http://d.android.com/tools/testing/testing_android.html">Testing Fundamentals</a>
- */
-public class ApplicationTest extends AndroidTestCase{
-    protected void setUp() throws Exception {
-        super.setUp();
-    }
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.failNotEquals;
+import static junit.framework.Assert.failNotSame;
 
-    protected void tearDown() throws Exception {
-        super.tearDown();
-    }
-
+@RunWith(AndroidJUnit4.class)
+@MediumTest
+public class ApplicationTest
+{
+    @Test
     public void testNoteTranspose()
     {
         Note n = new Note();
@@ -42,6 +44,7 @@ public class ApplicationTest extends AndroidTestCase{
     }
 
     // NOTE: Legacy tests. Quite uneccesary because of new implementation
+    @Test
     public void testNotesByName(){
         Note n  = new Note("C");
         assertEquals(0, n.GetNote());
@@ -53,6 +56,7 @@ public class ApplicationTest extends AndroidTestCase{
         assertEquals(10, n.GetNote());
     }
 
+    @Test
     public void testChord(){
         Chord c = new Chord(Chord.Base.Major);
 
@@ -85,6 +89,7 @@ public class ApplicationTest extends AndroidTestCase{
         assertEquals("Third note 6", 6, c.GetNoteValues()[2]);
     }
 
+    @Test
     public void testChordFinder()
     {
         Chord c = new Chord(Chord.Base.Major);
@@ -113,6 +118,7 @@ public class ApplicationTest extends AndroidTestCase{
         assertEquals("A fret is 2", 2, cf.GetFretValues()[3]);
     }
 
+    @Test
     public void testCheckAllChords()
     {
         ChordTestLib cl = new ChordTestLib();

@@ -1,5 +1,9 @@
 package com.newbucket.musiclib;
 
+import android.util.Log;
+
+import static android.content.ContentValues.TAG;
+
 /**
  * Created by benni on 16.10.2015.
  */
@@ -30,8 +34,13 @@ public class Note {
         return mNote;
     }
 
+    public String toStringFlat()
+    {
+        return Scale.ParseInteger(mNote, true);
+    }
+
     public String toString() {
-        return Scale.ParseInteger(mNote);
+        return Scale.ParseInteger(mNote, false);
     }
 
     public Note transpose(int value)

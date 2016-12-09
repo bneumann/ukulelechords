@@ -15,7 +15,7 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
     <style name="ChordSelector" parent="android:TextAppearance.Material.Button">
-        <item name="android:textStyle">bold</item>
+        <item name="android:textStyle"></item>
         <item name="android:textSize">@dimen/chord_select_text_size</item>
         <item name="android:background">@color/colorButton</item>
         <item name="android:textColor">@color/app_white</item>
@@ -23,6 +23,16 @@
         <item name="android:padding">@dimen/menu_text_padding</item>
         <item name="android:layout_margin">@dimen/chord_element_margin</item>"
 
+    </style>
+
+    <style name="ChordSelectorText" parent="Base.Theme.AppCompat.Light.Dialog">
+        <item name="android:textSize">@dimen/chord_selected_text_size</item>
+        <item name="android:textStyle">bold</item>
+        <!--<item name="android:background">@color/app_white</item>-->
+        <item name="android:textColor">@color/text_chord</item>
+        <item name="android:height">@dimen/chord_selected_text_size</item>
+        <item name="android:padding">@dimen/menu_text_padding</item>
+        <item name="android:layout_margin">@dimen/chord_element_margin</item>"
     </style>
 
 </resources>

@@ -7,7 +7,7 @@
 
     <fragment android:name="com.newbucket.ukulelechords.FretFragment"
               android:id="@+id/fret_fragment"
-              android:layout_weight="7"
+              android:layout_weight="1"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               tools:layout="@layout/fretview_fragment"/>

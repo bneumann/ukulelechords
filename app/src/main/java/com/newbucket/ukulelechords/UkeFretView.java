@@ -13,7 +13,8 @@ import com.newbucket.musiclib.ChordFinder;
 import com.newbucket.musiclib.Tuning;
 
 /**
- * Created by benni on 15.10.2015.
+ * @author Benjamin Giesinger
+ * @brief This class shows a fret and rendres the finger positions for a given chord.
  */
 public class UkeFretView extends ImageView{
 
@@ -23,6 +24,7 @@ public class UkeFretView extends ImageView{
     private Paint mNotePaint;
 
     private Chord mChord;
+    private ChordFinder mChordFinder;
 
     private final float shadowRadius = 4.0f;
     private final float shadowDx = 0.0f;
@@ -93,6 +95,9 @@ public class UkeFretView extends ImageView{
 
     private void init()
     {
+        // FIXME: 09.12.2016 Add tuning from preferences
+        mChordFinder = new ChordFinder();
+
         int cMain = ContextCompat.getColor(getContext(), R.color.colorPrimary);
 
         mThickStroke = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -140,14 +145,13 @@ public class UkeFretView extends ImageView{
             canvas.drawLine(i, sideSpace, i, height - sideSpace, mThinStroke);
         }
         if(mChord != null) {
-            ChordFinder cf = new ChordFinder(new Tuning(), mChord);
-            int[] fVals = cf.GetFretValues();
+            mChordFinder.FindNewChord(mChord);
+            int[] fVals = mChordFinder.GetFretValues();
             for (int i = 0; i < fVals.length; i++) {
                 canvas.drawCircle(fret * (fVals[i] - 0.5f), (fVals.length - i - 1) * div + sideSpace, (float) fret * 0.3f, mNotePaint);
             }
         }
 
-        //canvas.rotate(getRotation(), getWidth() / 2, getHeight() / 2);
     }
 
 }
