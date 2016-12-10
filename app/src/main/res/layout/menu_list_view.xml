@@ -4,8 +4,8 @@
                  android:layout_height="wrap_content"
                  android:background="@color/colorButtonActive">
 
-    <LinearLayout android:id="@+id/Text"
-                  android:orientation="vertical"
+    <LinearLayout
+        android:orientation="vertical"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:padding="@dimen/menu_text_padding"
@@ -21,7 +21,6 @@
             android:paddingLeft="@dimen/menu_text_padding"
             />
         <TextView
-            android:id="@+id/MenuText2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-black"

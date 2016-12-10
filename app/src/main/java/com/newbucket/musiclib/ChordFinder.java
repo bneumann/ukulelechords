@@ -9,7 +9,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Created by benni on 06.11.2016.
+ * This class combines a tuning and a chord to find the best fitting for the fingers
+ * @author Benjamin Giesinger
  */
 
 public class ChordFinder
@@ -17,8 +18,7 @@ public class ChordFinder
     private int[] mFretValues, mNoteValues;
     private Chord mChord;
     private Tuning mTuning;
-    private Matrix mNoteWeightMatrix, mNoteValueMatrix;
-    private static String TAG = "ChordFinder";
+    private final static String TAG = "ChordFinder";
 
     public ChordFinder()
     {
@@ -50,9 +50,9 @@ public class ChordFinder
     public void UpdateFretValues() {
         ArrayList<Note> c = mChord.GetNotes();
 
-        mNoteWeightMatrix = new Matrix(mTuning.size(), c.size());
-        mNoteValueMatrix = new Matrix(mTuning.size(), c.size());
-        Matrix tmp = new Matrix(2,2);
+        Matrix mNoteWeightMatrix = new Matrix(mTuning.size(), c.size());
+        Matrix mNoteValueMatrix = new Matrix(mTuning.size(), c.size());
+        Matrix tmp;
         for(int i = 0; i < mTuning.size(); i++) {
             for(int j = 0; j < c.size(); j++) {
                 Note tmpNote = new Note(c.get(j).GetNote());
@@ -93,9 +93,10 @@ public class ChordFinder
         public Matrix(Integer[][] matrix) {
             this(matrix.length, matrix[0].length);
             for (int i = 0; i < mRows; i++) {
-                for (int j = 0; j < mCols; j++) {
-                    mMatrix[i][j] = matrix[i][j];
-                }
+//                for (int j = 0; j < mCols; j++) {
+//                    mMatrix[i][j] = matrix[i][j];
+//                }
+                mMatrix[i] = Arrays.copyOf(matrix[i], matrix[i].length);
             }
         }
 

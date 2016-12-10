@@ -8,14 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-
 /**
  * Created by benni on 21.11.2016.
  */
@@ -39,7 +31,7 @@ public class MenuDrawerAdapter extends ArrayAdapter<DrawerItem>
 
         if (v == null) {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = inflater.inflate(R.layout.menu_list_view, null);
+            v = inflater.inflate(R.layout.menu_list_view, parent);
         }
 
         DrawerItem di = this.getItem(position);

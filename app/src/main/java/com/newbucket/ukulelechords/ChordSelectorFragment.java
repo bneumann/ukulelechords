@@ -23,8 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * This fragment shows either the selection for the chords or their harmonics.
  * @author Benjamin Giesinger
- * @brief This fragment shows either the selection for the chords or their harmonics.
  */
 
 public class ChordSelectorFragment extends Fragment
@@ -38,7 +38,8 @@ public class ChordSelectorFragment extends Fragment
     private Chord mOurCurrentChord;
 
     private List<Button> mChordButtons, mHarmonyButtons;
-    private Button mButtonUp, mButtonDown, mButtonHarm, mButtonChord;
+    private Button mButtonUp;
+    private Button mButtonDown;
     private Animation mAnimOpen, mAnimClose;
     private TextView mSelectedChordView;
 
@@ -63,8 +64,8 @@ public class ChordSelectorFragment extends Fragment
         mButtonUp = (Button)chordSelectFragment.findViewById(R.id.button_up);
         mButtonDown = (Button)chordSelectFragment.findViewById(R.id.button_down);
 
-        mButtonHarm = (Button) chordSelectFragment.findViewById(R.id.button_harm);
-        mButtonChord = (Button) chordSelectFragment.findViewById(R.id.button_chord);
+        Button lButtonHarm = (Button) chordSelectFragment.findViewById(R.id.button_harm);
+        Button lButtonChord = (Button) chordSelectFragment.findViewById(R.id.button_chord);
 
         mChordButtons = getAllButtons(chordMap);
         mHarmonyButtons = getAllButtons(harmMap);
@@ -90,8 +91,8 @@ public class ChordSelectorFragment extends Fragment
         mButtonUp.setOnClickListener(new OnUpDownButtonPress());
         mButtonDown.setOnClickListener(new OnUpDownButtonPress());
 
-        mButtonChord.setOnClickListener(new OnChordMenuButtonPress());
-        mButtonHarm.setOnClickListener(new OnHarmMenuButtonPress());
+        lButtonChord.setOnClickListener(new OnChordMenuButtonPress());
+        lButtonHarm.setOnClickListener(new OnHarmMenuButtonPress());
 
         if (mOurCurrentChord == null)
         {
@@ -127,44 +128,44 @@ public class ChordSelectorFragment extends Fragment
             b.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorButtonActive));
             mModifier = Chord.Modifier.None;
             //region This if else findes the chord and makes it stabil if internationalized
-            if (mHarmName.toLowerCase().equals(getString(R.string._7th)))
+            if (mHarmName.equals(getString(R.string._7th)))
             {
                 mHarmony = Chord.Base.Major;
                 mModifier = Chord.Modifier.Seven;
             }
-            else if (mHarmName.toLowerCase().equals(getString(R.string.minor)))
+            else if (mHarmName.equals(getString(R.string.minor)))
             {
                 mHarmony = Chord.Base.Minor;
             }
-            else if (mHarmName.toLowerCase().equals(getString(R.string.minor7)))
+            else if (mHarmName.equals(getString(R.string.minor7)))
             {
                 mHarmony = Chord.Base.Minor;
                 mModifier = Chord.Modifier.Seven;
             }
-            else if (mHarmName.toLowerCase().equals(getString(R.string.dim)))
+            else if (mHarmName.equals(getString(R.string.dim)))
             {
                 mHarmony = Chord.Base.Dim;
             }
-            else if (mHarmName.toLowerCase().equals(getString(R.string.aug)))
+            else if (mHarmName.equals(getString(R.string.aug)))
             {
                 mHarmony = Chord.Base.Aug;
             }
-            else if (mHarmName.toLowerCase().equals(getString(R.string._6th)))
+            else if (mHarmName.equals(getString(R.string._6th)))
             {
                 mHarmony = Chord.Base.Major;
                 mModifier = Chord.Modifier.Sixth;
             }
-            else if (mHarmName.toLowerCase().equals(getString(R.string.major7)))
+            else if (mHarmName.equals(getString(R.string.major7)))
             {
                 mHarmony = Chord.Base.Major;
                 mModifier = Chord.Modifier.Major;
             }
-            else if (mHarmName.toLowerCase().equals(getString(R.string._9th)))
+            else if (mHarmName.equals(getString(R.string._9th)))
             {
                 mHarmony = Chord.Base.Major;
                 mModifier = Chord.Modifier.Nine;
             }
-            else // if(mHarmName.toLowerCase().equals(getString(R.string.major)))
+            else // if(mHarmName.equals(getString(R.string.major)))
             {
                 mHarmony = Chord.Base.Major;
                 mHarmName = "";

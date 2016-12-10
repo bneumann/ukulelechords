@@ -1,32 +1,13 @@
 package com.newbucket.ukulelechords;
 
 import android.app.Activity;
-import android.app.Fragment;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
-import android.widget.ListView;
 
 import com.newbucket.musiclib.Chord;
-import com.newbucket.musiclib.ChordLib;
-import com.newbucket.musiclib.Note;
 
-import java.util.ArrayList;
 
 public class MainActivity extends Activity implements ChordSelectorFragment.OnChordSelectListener
 {

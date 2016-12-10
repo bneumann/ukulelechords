@@ -9,8 +9,8 @@ import android.view.ViewGroup;
 import com.newbucket.musiclib.Chord;
 
 /**
+ * This fragment holds the main fret view and has an interface to set a chord
  * @author Benjamin Giesinger
- * @brief This fragment holds the main fret view and has an interface to set a chord
  */
 
 public class FretFragment extends Fragment

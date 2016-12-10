@@ -1,7 +1,7 @@
 package com.newbucket.musiclib;
 
 /**
- * Created by benni on 06.11.2016.
+ * This class holds the data about the scale used in the instrument.
  */
 
 public class Scale
@@ -11,8 +11,17 @@ public class Scale
             {"C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"}
     };
 
+    /**
+     * The length of the scale returns the count of all notes in this scale
+     */
     public static int length = maScale[0].length;
+    /**
+     * The maximum value is the maximum accessible value in the scale
+     */
     public static int Max = maScale[0].length - 1;
+    /**
+     * The minimum value is always 0
+     */
     public static int Min = 0;
 
     /**
@@ -36,6 +45,12 @@ public class Scale
         return res;
     }
 
+    /**
+     * This function returns the string representation of the current step in the scale. e.g. 0 -> C
+     * @param value An integer value between Min and Max
+     * @param flat Option to get the flat or sharp representation
+     * @return A string that represents the scale step
+     */
     public static String ParseInteger(int value, boolean flat)
     {
         if(value < Scale.Min || value > Scale.Max) {

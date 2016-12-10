@@ -10,11 +10,10 @@ import android.widget.ImageView;
 
 import com.newbucket.musiclib.Chord;
 import com.newbucket.musiclib.ChordFinder;
-import com.newbucket.musiclib.Tuning;
 
 /**
+ * This class shows a fret and rendres the finger positions for a given chord.
  * @author Benjamin Giesinger
- * @brief This class shows a fret and rendres the finger positions for a given chord.
  */
 public class UkeFretView extends ImageView{
 
@@ -30,9 +29,11 @@ public class UkeFretView extends ImageView{
     private final float shadowDx = 0.0f;
     private final float shadowDy = 2.0f;
     private final int shadowColor = Color.BLACK;
+    private final float mFretWidthRatio = 3f / 3.5f; // Measured from Ukulele
+
+    // TODO: 10.12.2016 This shoudl be settable from outside
     private final int NUM_FRETS = 5;
     private final int NUM_STRINGS = 4;
-    private final float mFretWidthRatio = 3f / 3.5f; // Measured from Ukulele
 
     public UkeFretView(Context context) {
         super(context);
@@ -83,7 +84,7 @@ public class UkeFretView extends ImageView{
             height = parentHeight;
         } else if (heightMode == MeasureSpec.AT_MOST) {
             //Can't be bigger than...
-            height = (int)((float)parentWidth * mFretWidthRatio);
+//            height = (int)((float)parentWidth * mFretWidthRatio);
             height = parentHeight;
         } else {
             //Be whatever you want

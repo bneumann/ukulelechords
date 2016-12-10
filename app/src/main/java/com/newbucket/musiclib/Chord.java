@@ -8,8 +8,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
+ * This class hold a list of notes inside a chord
  * @author Benjamin Giesinger
- * @brief This class hold single
  */
 public class Chord extends ArrayList<Note>
 {
@@ -207,9 +207,9 @@ public class Chord extends ArrayList<Note>
         final Pattern pattern = Pattern.compile(regex);
         final Matcher matcher = pattern.matcher(chordname);
 
-        Note tNote = null;
-        Base tChord = null;
-        Modifier tMod = null;
+        Note tNote;
+        Base tChord;
+        Modifier tMod;
 
         if (matcher.matches()) {
             tNote = new Note(Scale.ParseString(matcher.group(1)));

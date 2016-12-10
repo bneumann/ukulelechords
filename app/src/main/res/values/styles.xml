@@ -15,7 +15,6 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
     <style name="ChordSelector" parent="android:TextAppearance.Material.Button">
-        <item name="android:textStyle"></item>
         <item name="android:textSize">@dimen/chord_select_text_size</item>
         <item name="android:background">@color/colorButton</item>
         <item name="android:textColor">@color/app_white</item>

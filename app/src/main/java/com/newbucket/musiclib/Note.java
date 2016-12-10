@@ -1,9 +1,5 @@
 package com.newbucket.musiclib;
 
-import android.util.Log;
-
-import static android.content.ContentValues.TAG;
-
 /**
  * Created by benni on 16.10.2015.
  */
