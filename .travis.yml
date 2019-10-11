@@ -10,6 +10,10 @@ env:
     - ADB_INSTALL_TIMEOUT=8
     - ABI=x86_64
     - EMU_FLAVOR=default # use google_apis flavor if no default flavor emulator
+    # PATH order is incredibly important. e.g. the 'emulator' script exists in more than one place!
+    - ANDROID_HOME=/usr/local/android-sdk
+    - TOOLS=${ANDROID_HOME}/tools
+    - PATH=${ANDROID_HOME}:${ANDROID_HOME}/emulator:${TOOLS}:${TOOLS}/bin:${ANDROID_HOME}/platform-tools:${PATH}
   matrix:
   #  - API=21
   #  - API=22
