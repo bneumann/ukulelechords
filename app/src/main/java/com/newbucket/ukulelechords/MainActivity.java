@@ -1,376 +1,24 @@
 package com.newbucket.ukulelechords;
 
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.ArrayAdapter;
 import android.util.Log;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 
-import java.util.ArrayList;
+import com.newbucket.musiclib.Chord;
 
-public class MainActivity extends AppCompatActivity
+
+public class MainActivity extends Activity implements ChordSelectorFragment.OnChordSelectListener
 {
-
-    private final String SYMBOL_FLAT = "\u266D";
-    private final String SYMBOL_NATURAL = "\u266E";
-    private final String SYMBOL_SHARP = "\u266F";
-
     public String TAG = "MainActivity";
-
-    protected String mKey = "C";
-    protected String mIntonation = SYMBOL_NATURAL;
-    protected String mHarmony = "";
-
-    private ViewGroup mChordMap;
-    private ViewGroup mHarmonyMap;
-    private UkeFretView mFretView;
-    private ChordLib mChordlib;
     private Chord mCurrentChord;
 
-    private String[] mChordArray = {"C", "D", "E", "F", "G", "A", "B", SYMBOL_FLAT};
-    private String[] mHarmonyArray = {"M", "7", "m", "m7", "dim", "aug", "6", "maj7", "9"};
-
-    private boolean mChordsOpen, mKeysOpen;
-    private Animation mAnimationOpen, mAnimationClose;
-
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        // FIXME: Implement accoring to https://developer.android.com/training/implementing-navigation/nav-drawer.html
-//        String[] mPlanetTitles = new String[]{"Test", "Bla"};
-//        DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-//        ListView mDrawerList = (ListView) findViewById(R.id.left_drawer);
-//
-//        // Set the adapter for the list view
-//        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-//                android.R.layout.simple_list_item_1, mPlanetTitles));
-//        // Set the list's click listener
-//        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener()
-//        {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-//            {
-//
-//            }
-//        });
-
-        mChordMap = (ViewGroup) findViewById(R.id.chord_map);
-        mHarmonyMap = (ViewGroup) findViewById(R.id.harm_map);
-        mFretView = (UkeFretView) findViewById(R.id.fret_view);
-        mChordlib = new ChordLib();
-
-        mAnimationOpen = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
-        mAnimationClose = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
-
-        mChordsOpen = false;
-        mKeysOpen = false;
-
-        mFretView.SetChord(mChordlib.getChord(mKey));
-        mFretView.setOnLongClickListener(new onFretLongCLickListener());
-
-        FloatingActionButton changeAccidental = (FloatingActionButton) findViewById(R.id.change_accidental);
-        changeAccidental.setOnClickListener(new onChangeAccidental());
-
-        // The tree observer throws this event when the layout has been measured.
-        ViewTreeObserver vto = mChordMap.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener()
-        {
-            @Override
-            public void onGlobalLayout()
-            {
-                // draw keys on hidden chord map layout
-                drawKeys();
-                // draw harmonies on hidden harmony layout
-                drawHarmonies();
-            }
-        });
-
-        FloatingActionButton vAddHarmonies = (FloatingActionButton) findViewById(R.id.addharms);
-        vAddHarmonies.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                if(mKeysOpen) {
-                    hide(mHarmonyMap);
-                    mKeysOpen = !mKeysOpen;
-                }
-                if(!mChordsOpen) {
-                    reveal(mChordMap);
-                }
-                else
-                {
-                    hide(mChordMap);
-                }
-                mChordsOpen = !mChordsOpen;
-            }
-        });
-
-        FloatingActionButton vAddChords = (FloatingActionButton) findViewById(R.id.addchords);
-        vAddChords.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                if(mChordsOpen) {
-                    hide(mChordMap);
-                    mChordsOpen = !mChordsOpen;
-                }
-                if(!mKeysOpen) {
-                    reveal(mHarmonyMap);
-                }
-                else
-                {
-                    hide(mHarmonyMap);
-                }
-                mKeysOpen = !mKeysOpen;
-            }
-        });
-    }
-
-    private void drawKeys()
-    {
-        ArrayList<View> tList = getAllChildren(mChordMap);
-        int counter = 0;
-        for (View v : tList)
-        {
-            // Print key on buttons
-            FloatingActionButton fab = (FloatingActionButton) v;
-            Bitmap tmpBitmap;
-            // Draw only regular key, not the accidental changer
-            if (counter != tList.size() - 1)
-            {
-                // Remove natural sign if intonation is natural because it looks weird.
-                if (mIntonation.equals(SYMBOL_NATURAL))
-                {
-                    tmpBitmap = textAsBitmap(mChordArray[counter], fab.getHeight() * 0.75f, Color.WHITE);
-                }
-                else
-                {
-                    tmpBitmap = textAsBitmap(mChordArray[counter] + mIntonation, fab.getHeight() * 0.75f, Color.WHITE);
-                }
-                // TODO: Use drawables
-                fab.setImageBitmap(tmpBitmap);
-                fab.setOnClickListener(new onKeyClickListener());
-                fab.setTag(R.id.tag_key_chord, mChordArray[counter++]);
-            }
-        }
-    }
-
-    private class onFretLongCLickListener implements View.OnLongClickListener
-    {
-        @Override
-        public boolean onLongClick(View v)
-        {
-            Log.d(TAG, "Long click detected");
-            return true;
-        }
-    }
-
-    private class onChangeAccidental implements View.OnClickListener
-    {
-        private int mIcon;
-
-        @Override
-        public void onClick(View v)
-        {
-            Log.d(TAG, String.format("Switching state to %s", mIntonation));
-            switch(mIntonation)
-            {
-                case SYMBOL_NATURAL:
-                    mIcon = R.drawable.ic_key_up; // < next Icon
-                    mIntonation = SYMBOL_FLAT; // current State
-                    break;
-                case SYMBOL_FLAT:
-                    mIcon = R.drawable.ic_key_reset;
-                    mIntonation = SYMBOL_SHARP;
-                    break;
-                case SYMBOL_SHARP:
-                    mIcon = R.drawable.ic_key_down;
-                    mIntonation = SYMBOL_NATURAL;
-                    break;
-                default:
-                    mIcon = R.drawable.ic_key_down;
-                    mIntonation = SYMBOL_NATURAL;
-                    break;
-            }
-            ((FloatingActionButton)v).setImageResource(mIcon);
-            drawKeys();
-        }
-    }
-
-    private class onKeyClickListener implements View.OnClickListener
-    {
-        @Override
-        public void onClick(View v)
-        {
-            FloatingActionButton fab = (FloatingActionButton) v;
-            String key = (String) v.getTag(R.id.tag_key_chord);
-            String harm = (String) v.getTag(R.id.tag_key_harmony);
-            if (key != null)
-            {
-                if (key.equals(SYMBOL_SHARP) || key.equals(SYMBOL_FLAT) || key.equals(SYMBOL_NATURAL))
-                {
-                    switch (mIntonation)
-                    {
-                        case SYMBOL_NATURAL:
-                            mChordArray[mChordArray.length - 1] = SYMBOL_SHARP;
-                            break;
-                        case SYMBOL_FLAT:
-                            mChordArray[mChordArray.length - 1] = SYMBOL_NATURAL;
-                            break;
-                        case SYMBOL_SHARP:
-                            mChordArray[mChordArray.length - 1] = SYMBOL_FLAT;
-                            break;
-                    }
-                    drawKeys();
-                }
-                else
-                {
-                    mKey = key;
-                    resetBackgroundColor(mChordMap);
-                }
-            }
-            if (harm != null)
-            {
-                // Chordlib has no "M" extension
-                harm = harm.equals("M") ? "" : harm;
-                mHarmony = harm;
-                resetBackgroundColor(mHarmonyMap);
-            }
-            // TODO: This is crappy code. Oh yeah. Rewrite the whole intonation-symbol thingy
-            String intonation = "";
-            switch (mIntonation)
-            {
-                case SYMBOL_NATURAL:
-                    intonation = "";
-                    break;
-                case SYMBOL_FLAT:
-                    intonation = "b";
-                    break;
-                case SYMBOL_SHARP:
-                    intonation = "#";
-                    break;
-            }
-            String nChord = mKey + intonation + mHarmony;
-            Log.d(TAG, nChord);
-            mCurrentChord = mChordlib.getChord(nChord);
-            mFretView.SetChord(mCurrentChord);
-            fab.setBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.colorButtonActive));
-        }
-    }
-
-    private void drawHarmonies()
-    {
-        ArrayList<View> tList = getAllChildren(mHarmonyMap);
-        int counter = 0;
-        for (View v : tList)
-        {
-            // Print key on buttons
-            FloatingActionButton fab = (FloatingActionButton) v;
-            if (fab.getWidth() == 0 || fab.getHeight() == 0)
-            {
-                // As long as there is no landscape version we close the menu here
-                return;
-            }
-            fab.setImageBitmap(textAsBitmap(mHarmonyArray[counter], fab.getHeight() * 0.75f, Color.WHITE));
-            fab.setTag(R.id.tag_key_harmony, mHarmonyArray[counter++]);
-
-            fab.setOnClickListener(new onKeyClickListener());
-        }
-    }
-
-    public static Bitmap textAsBitmap(String text, float textSize, int textColor) {
-        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setTextSize(textSize);
-        paint.setColor(textColor);
-        paint.setTextAlign(Paint.Align.LEFT);
-        float baseline = -paint.ascent(); // ascent() is negative
-        int width = (int) (paint.measureText(text) + 0.0f); // round
-        int height = (int) (baseline + paint.descent() + 0.0f);
-        Bitmap image = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-
-        Canvas canvas = new Canvas(image);
-        canvas.drawText(text, 0, baseline, paint);
-        return image;
-    }
-
-    private void resetBackgroundColor(ViewGroup buttonGroup)
-    {
-        ArrayList<View> tList = getAllChildren(buttonGroup);
-        for (View b : tList)
-        {
-            b.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.colorButton));
-        }
-    }
-
-    private ArrayList<View> getAllChildren(ViewGroup group)
-    {
-        ArrayList<View> reply = new ArrayList<View>();
-        for (int i = 0; i < group.getChildCount(); i++)
-        {
-            View v = group.getChildAt(i);
-            if (v instanceof ViewGroup)
-            {
-                reply.addAll(getAllChildren((ViewGroup) v));
-            }
-            else if (v instanceof View)
-            {
-                reply.add(v);
-            }
-        }
-        return reply;
-    }
-
-    private void reveal(ViewGroup targetView)
-    {
-        ArrayList<View> tList = getAllChildren(targetView);
-        for (View v : tList)
-        {
-            reveal(v);
-        }
-    }
-
-    private void reveal(final View targetView)
-    {
-        Log.i(TAG, "Starting 'show' animation");
-        targetView.startAnimation(mAnimationOpen);
-        targetView.setClickable(true);
-    }
-
-    private void hide(ViewGroup targetView)
-    {
-        ArrayList<View> tList = getAllChildren(targetView);
-        for (View v : tList)
-        {
-            hide(v);
-        }
-    }
-
-    private void hide(final View targetView)
-    {
-        Log.i(TAG, String.format("Starting 'close' animation [View: %d]", targetView.getId()));
-        targetView.startAnimation(mAnimationClose);
-        targetView.setClickable(false);
+        setContentView(R.layout.chordlib_activity);
     }
 
     @Override
@@ -396,5 +44,47 @@ public class MainActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void updateFretFragment()
+    {
+        Log.d(TAG, mCurrentChord.toString());
+        FretFragment fretFrag = (FretFragment)getFragmentManager().findFragmentById(R.id.fret_fragment);
+        if(fretFrag != null)
+        {
+            fretFrag.setChord(mCurrentChord);
+        }
+        else
+        {
+            // If we are on a different pane it might occur that we want to load the fret fragment here.
+        }
+    }
+
+    @Override
+    public void onChordSelected(Chord chord)
+    {
+        mCurrentChord = chord;
+        Log.d(TAG, chord.toString());
+        updateFretFragment();
+    }
+
+    @Override
+    public void onUpPressed()
+    {
+        if(mCurrentChord != null)
+        {
+            mCurrentChord.transpose(1);
+            updateFretFragment();
+        }
+    }
+
+    @Override
+    public void onDownPressed()
+    {
+        if(mCurrentChord != null)
+        {
+            mCurrentChord.transpose(-1);
+            updateFretFragment();
+        }
     }
 }

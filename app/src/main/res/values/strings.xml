@@ -1,4 +1,24 @@
 <resources>
+    <!-- Main Activity -->
     <string name="app_name">Ukulele Chords</string>
     <string name="action_settings">Settings</string>
+
+    <!-- Welcome Activity -->
+
+    <!-- Chord Selector -->
+    <string name="select_chord">Chord</string>
+    <string name="select_harm">Harmony</string>
+
+    <!-- Harmony names -->
+    <string name="minor">Minor</string>
+    <string name="major">Major</string>
+    <string name="minor7">Minor7</string>
+    <string name="dim">Dim</string>
+    <string name="major7">Major7</string>
+    <string name="_6th">6th</string>
+    <string name="_7th">7th</string>
+    <string name="_9th">9th</string>
+    <string name="sus4">Sus4</string>
+    <string name="sus2">Sus2</string>
+    <string name="aug">Aug</string>
 </resources>
