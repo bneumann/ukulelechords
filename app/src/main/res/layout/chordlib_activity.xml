@@ -17,5 +17,5 @@
               android:layout_weight="1"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              tools:layout="@layout/chordselector_fragment"/>
+              tools:layout="@layout/chordselector_fragment" />
 </LinearLayout>

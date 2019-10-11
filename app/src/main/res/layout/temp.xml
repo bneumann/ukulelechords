@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/instruments_chooser_layout"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="fill_parent"
+    tools:context=".SheetViewer">
+
+    <ExpandableListView
+        android:id="@+id/instruments_chooser_list"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="
+        @android:color/darker_gray"
+        android:dividerHeight="0.5dp"
+        android:drawSelectorOnTop="false"
+        android:layout_marginLeft="10dp"
+        android:indicatorLeft="?android:attr/expandableListPreferredItemIndicatorLeft"
+        tools:listitem="@android:layout/simple_expandable_list_item_2">
+    </ExpandableListView>
+</LinearLayout>

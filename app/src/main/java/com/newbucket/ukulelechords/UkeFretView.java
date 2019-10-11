@@ -11,11 +11,14 @@ import android.widget.ImageView;
 import com.newbucket.musiclib.Chord;
 import com.newbucket.musiclib.ChordFinder;
 
+import androidx.core.content.ContextCompat;
+
 /**
  * This class shows a fret and rendres the finger positions for a given chord.
  * @author Benjamin Giesinger
  */
-public class UkeFretView extends ImageView{
+public class UkeFretView extends ImageView
+{
 
     private static final String TAG = "FretView";
     private Paint mThickStroke;
