@@ -4,13 +4,14 @@ android {
     compileSdkVersion rootProject.compileSdkVersion
 
     defaultConfig {
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         applicationId "com.newbucket.ukulelechords"
         minSdkVersion rootProject.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
-        versionCode 5
-        versionName "1.0"
+        versionCode 6
+        versionName "1.1"
     }
     buildTypes {
         release {
