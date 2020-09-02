@@ -8,6 +8,9 @@ env:
   - ANDROID_TARGET=android-24  ANDROID_ABI=armeabi-v7a
   - ANDROID_TARGET=android-29  ANDROID_ABI=armeabi-v7a
 
+before_install:
+  - yes | sdkmanager "platforms;$ANDROID_TARGET"
+
 android:
   components:
     - platform-tools
@@ -23,8 +26,5 @@ before_script:
   - emulator -avd test -no-skin -no-audio -no-window &
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
-
-before_install:
-  - yes | sdkmanager "platforms;$ANDROID_TARGET"
 
 script: ./gradlew connectedAndroidTest
