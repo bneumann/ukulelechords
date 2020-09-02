@@ -26,5 +26,5 @@ before_script:
 
 before_install:
   - yes | sdkmanager "platforms;$ANDROID_TARGET"
-  -
+
 script: ./gradlew connectedAndroidTest
