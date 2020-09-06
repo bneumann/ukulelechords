@@ -2,19 +2,27 @@ language: android
 jdk: oraclejdk8
 sudo: false
 
+env:
+  matrix:
+  - ANDROID_TARGET=android-22  ANDROID_ABI=armeabi-v7a
+  - ANDROID_TARGET=android-24  ANDROID_ABI=armeabi-v7a
+  - ANDROID_TARGET=android-29  ANDROID_ABI=arm64-v8a
+
+before_install:
+  - yes | sdkmanager "platforms;$ANDROID_TARGET"
+
 android:
   components:
     - platform-tools
     - tools
     - build-tools-24.0.2
-    - android-22
-    - android-25
-    - sys-img-armeabi-v7a-android-22
+    - $ANDROID_TARGET
+    - sys-img-armeabi-v7a-$ANDROID_TARGET
     - extra-android-m2repository
 
 before_script:
   # Create and start emulator
-  - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a
+  - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
   - emulator -avd test -no-skin -no-audio -no-window &
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
