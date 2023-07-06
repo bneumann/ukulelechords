@@ -88,35 +88,35 @@
         android:orientation="vertical">
 
         <Button
+            style="@style/ChordSelector"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/_9th"
-            style="@style/ChordSelector"
-            android:elevation="2dp"/>
+            android:elevation="2dp"
+            android:text="@string/_9th" />
 
         <Button
+            style="@style/ChordSelector"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/sus4"
-            style="@style/ChordSelector"
-            android:elevation="2dp"/>
+            android:elevation="2dp"
+            android:text="@string/sus4" />
 
         <Button
+            style="@style/ChordSelector"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/sus2"
-            style="@style/ChordSelector"
-            android:elevation="2dp"/>
+            android:elevation="2dp"
+            android:text="@string/sus2" />
 
         <Button
+            style="@style/ChordSelector"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/aug"
-            style="@style/ChordSelector"
-            android:elevation="2dp"/>
+            android:elevation="2dp"
+            android:text="@string/aug" />
     </LinearLayout>
 </LinearLayout>

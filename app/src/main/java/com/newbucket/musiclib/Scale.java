@@ -40,7 +40,7 @@ public class Scale
         }
         if(res == -1)
         {
-            throw new IllegalArgumentException(notename + " not found in scale");
+            throw new IllegalArgumentException(String.format("%s not found in scale", notename));
         }
         return res;
     }
@@ -54,7 +54,7 @@ public class Scale
     public static String ParseInteger(int value, boolean flat)
     {
         if(value < Scale.Min || value > Scale.Max) {
-            throw new IllegalArgumentException(value + " out of bounds of scale. Which is between " + Scale.Min + " and " + Scale.Max);
+            throw new IllegalArgumentException(String.format("%d out of bounds of scale. Which is between %d and %d", value, Scale.Min, Scale.Max));
         }
 
         String res;
